@@ -16,11 +16,11 @@ public class Agente {
     @Column(nullable = false)
     private String nome;
 
-    @Enumerated //Para salvar o nome e não o num da posição do enum
+    @Enumerated(EnumType.STRING) //Para salvar o nome e não o num da posição do enum
     @Column(nullable = false)
     private EspecialidadeAgente especialidade;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SituacaoAgente situacao;
 

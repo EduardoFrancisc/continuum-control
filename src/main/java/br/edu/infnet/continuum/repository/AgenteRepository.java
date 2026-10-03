@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface AgenteRepository extends JpaRepository<Agente, Long> {
-    List<Agente> getAgentesBySituacao(SituacaoAgente situacao);
-    List<Agente> getAgentesByEspecialidade(EspecialidadeAgente especialidade);
+    List<Agente> getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente situacao);
+    List<Agente> getAgentesByEspecialidadeAndIsDeletedFalse(EspecialidadeAgente especialidade);
 }

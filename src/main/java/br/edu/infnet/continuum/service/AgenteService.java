@@ -3,6 +3,7 @@ package br.edu.infnet.continuum.service;
 import br.edu.infnet.continuum.domain.enums.EspecialidadeAgente;
 import br.edu.infnet.continuum.domain.enums.SituacaoAgente;
 import br.edu.infnet.continuum.domain.model.Agente;
+import br.edu.infnet.continuum.exception.AgenteDeletado;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.AgenteRepository;
 import jakarta.validation.Valid;
@@ -30,16 +31,15 @@ public class AgenteService {
 
     //Agentes disponíveis
     public List<Agente> getByDisponibility() {
-        return agenteRepository.getAgentesBySituacao(SituacaoAgente.DISPONÍVEL);
+        return agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente.DISPONÍVEL);
     }
 
     public List<Agente> getBySituacao(SituacaoAgente situacao){
-        return agenteRepository.getAgentesBySituacao(situacao);
+        return agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(situacao);
     }
 
-
     public List<Agente> getByEspecialidade(EspecialidadeAgente especialidade) {
-        return agenteRepository.getAgentesByEspecialidade(especialidade);
+        return agenteRepository.getAgentesByEspecialidadeAndIsDeletedFalse(especialidade);
     }
 
     public Agente create(@Valid Agente agente) {
@@ -47,10 +47,21 @@ public class AgenteService {
     }
 
     public Agente delete(Long id) {
+        Agente a = getById(id);
+        if (a.getIsDeleted()){
+            throw new AgenteDeletado("Agente "+id+" já está deletado(a).");
+        }
+        a.setIsDeleted(true);
+        return agenteRepository.save(a);
+    }
 
-        //Fazer lógica de não conseguir deletar quem IsDeleted = true
+    public Agente update(@Valid Agente n, Long id) {
+        Agente a = getById(id);
 
-        getById(id).setIsDeleted(true);
-        return getById(id);
+        a.setNome(n.getNome());
+        a.setEspecialidade(n.getEspecialidade());
+        a.setSituacao(n.getSituacao());
+
+        return agenteRepository.save(a);
     }
 }

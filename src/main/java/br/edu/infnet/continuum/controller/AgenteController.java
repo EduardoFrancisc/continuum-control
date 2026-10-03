@@ -53,10 +53,16 @@ public class AgenteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(agente));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Agente> update(@Valid @RequestBody Agente novoAgente, @PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(service.update(novoAgente, id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Agente> delete(@PathVariable Long id) {
         return ResponseEntity.ok(service.delete(id));
     }
+
 
 
 

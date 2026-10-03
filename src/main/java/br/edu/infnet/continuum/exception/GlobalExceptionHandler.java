@@ -72,4 +72,31 @@ public class GlobalExceptionHandler {
         );
 
     }
+
+    @ExceptionHandler(EntidadeNaoLocalizada.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleEntidadeValidation(EntidadeNaoLocalizada ex){
+        return Map.of("timestamp", LocalDateTime.now(),
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "error", "Not Acceptable",
+                "message", ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(AgenteDeletado.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleAgenteDeletadoValidation(AgenteDeletado ex){
+        return Map.of("timestamp", LocalDateTime.now(),
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "error", "Not Acceptable",
+                "message", ex.getMessage()
+        );
+    }
+
+
+
+
+
+
+
 }

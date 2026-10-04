@@ -1,6 +1,7 @@
 package br.edu.infnet.continuum.exception;
 
 import br.edu.infnet.continuum.domain.enums.EspecialidadeAgente;
+import br.edu.infnet.continuum.domain.enums.ImportanciaEH;
 import br.edu.infnet.continuum.domain.enums.SituacaoAgente;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -33,6 +34,14 @@ public class GlobalExceptionHandler {
                     "status", HttpStatus.BAD_REQUEST.value(),
                     "error", "Bad Request",
                     "message", "Tipos de especialidade aceitas: INVESTIGACAO, CONTENCAO_FISICA, ANALISE_HISTORICA, ENGENHARIA_TEMPORAL"
+            );
+        }
+
+        if(ex.getRequiredType() == ImportanciaEH.class){
+            return Map.of("timestamp", LocalDateTime.now(),
+                    "status", HttpStatus.BAD_REQUEST.value(),
+                    "error", "Bad Request",
+                    "message", "Tipos de importância aceitas: BAIXA, MODERADA, ALTA, CRÍTICA"
             );
         }
 
@@ -74,15 +83,16 @@ public class GlobalExceptionHandler {
     }
 
     //Erro na deleção de um agente excluido
-    @ExceptionHandler(AgenteDeletado.class)
+    @ExceptionHandler(EntidadeDeletada.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleAgenteDeletadoValidation(AgenteDeletado ex){
+    public Map<String, Object> handleAgenteDeletadoValidation(EntidadeDeletada ex){
         return Map.of("timestamp", LocalDateTime.now(),
                 "status", HttpStatus.BAD_REQUEST.value(),
                 "error", "Not Acceptable",
                 "message", ex.getMessage()
         );
     }
+
 
 
 

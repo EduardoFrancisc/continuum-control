@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "Agentes")
+@Table(name = "agentes")
 public class Agente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +25,5 @@ public class Agente {
     private SituacaoAgente situacao = SituacaoAgente.DISPONÍVEL;
 
     @Column(nullable = false)
-    private Boolean isDeleted = false;
+    private Boolean IsDeleted = false;
 }

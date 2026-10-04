@@ -58,10 +58,15 @@ public class AgenteService {
     public Agente update(@Valid Agente n, Long id) {
         Agente a = getById(id);
 
+        if (a.getIsDeleted()){throw new AgenteDeletado("Agente "+id+" já está deletado(a).");}
+
         a.setNome(n.getNome());
         a.setEspecialidade(n.getEspecialidade());
         a.setSituacao(n.getSituacao());
 
         return agenteRepository.save(a);
     }
+
+
+
 }

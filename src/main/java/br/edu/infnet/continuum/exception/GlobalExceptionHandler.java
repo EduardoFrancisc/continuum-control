@@ -48,14 +48,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public Map<String, Object> handleCreationsValidation(HttpMessageNotReadableException ex){
         if (ex.getCause() instanceof InvalidFormatException i){ //varifica se é a forma do json (request body) que veio errada ou não bate com o enum
-            if (i.getTargetType() == SituacaoAgente.class){
-                return Map.of("timestamp", LocalDateTime.now(),
-                        "status", HttpStatus.NOT_ACCEPTABLE.value(),
-                        "error", "Not Acceptable",
-                        "message", "Tipos de situações aceitas: DISPONÍVEL, EM_MISSÃO, SUSPENSO, INATIVO"
-                );
-            }
-
             if (i.getTargetType() == EspecialidadeAgente.class){
                 return Map.of("timestamp", LocalDateTime.now(),
                         "status", HttpStatus.NOT_ACCEPTABLE.value(),
@@ -64,13 +56,11 @@ public class GlobalExceptionHandler {
                 );
             }
         }
-
         return Map.of("timestamp", LocalDateTime.now(),
                 "status", HttpStatus.NOT_ACCEPTABLE.value(),
                 "error", "Not Acceptable",
                 "message", ex.getMessage()
         );
-
     }
 
     @ExceptionHandler(EntidadeNaoLocalizada.class)
@@ -83,6 +73,7 @@ public class GlobalExceptionHandler {
         );
     }
 
+    //Erro na deleção de um agente excluido
     @ExceptionHandler(AgenteDeletado.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleAgenteDeletadoValidation(AgenteDeletado ex){

@@ -22,7 +22,7 @@ public class Agente {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SituacaoAgente situacao;
+    private SituacaoAgente situacao = SituacaoAgente.DISPONÍVEL;
 
     @Column(nullable = false)
     private Boolean isDeleted = false;

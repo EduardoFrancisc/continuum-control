@@ -179,3 +179,95 @@ VALUES ('Plano Real',
         '1994-07-01',
         'BAIXA',
         false);
+
+--Anomalias
+INSERT INTO anomalias
+(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
+VALUES
+    (1,
+     'Alteração de data',
+     'A data registrada no sistema diverge da data encontrada no documento original.',
+     '2026-01-15',
+     'ALTO',
+     'DETECTADA',
+     'Sistema',
+     'A divergência foi identificada durante uma validação automática.',
+     false);
+
+INSERT INTO anomalias
+(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
+VALUES
+    (2,
+     'Valor inconsistente',
+     'O valor registrado para o evento não corresponde ao valor encontrado na documentação.',
+     '2026-02-03',
+     'CRÍTICO',
+     'EM_ANÁLISE',
+     'Auditoria',
+     'A inconsistência está sendo analisada pela equipe responsável.',
+     false);
+
+INSERT INTO anomalias
+(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
+VALUES
+    (3,
+     'Documento ausente',
+     'Documento obrigatório relacionado ao evento não foi localizado.',
+     '2026-02-20',
+     'MODERADO',
+     'DETECTADA',
+     'Importação',
+     'O documento deverá ser localizado ou anexado ao registro.',
+     false);
+
+INSERT INTO anomalias
+(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
+VALUES
+    (1,
+     'Responsável divergente',
+     'O responsável registrado no evento é diferente do responsável indicado na documentação.',
+     '2026-03-01',
+     'BAIXO',
+     'CONFIRMADA',
+     'Análise manual',
+     'A divergência foi confirmada após análise dos documentos disponíveis.',
+     false);
+
+INSERT INTO anomalias
+(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
+VALUES
+    (4,
+     'Evento duplicado',
+     'Foram identificados registros possivelmente referentes ao mesmo evento histórico.',
+     '2026-03-12',
+     'ALTO',
+     'EM_CORREÇÃO',
+     'Sistema',
+     'Os registros duplicados estão sendo analisados para correção.',
+     false);
+
+INSERT INTO anomalias
+(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
+VALUES
+    (5,
+     'Informação incompleta',
+     'O registro do evento possui informações importantes ausentes.',
+     '2026-04-05',
+     'MODERADO',
+     'ESTABILIZADA',
+     'Importação',
+     'A inconsistência foi tratada e o registro encontra-se estável.',
+     false);
+
+INSERT INTO anomalias
+(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
+VALUES
+    (6,
+     'Origem desconhecida',
+     'Não foi possível determinar a origem do registro histórico.',
+     '2026-04-18',
+     'BAIXO',
+     'IRREVERSÍVEL',
+     NULL,
+     'A origem da informação não pôde ser determinada e não há dados suficientes para correção.',
+     false);

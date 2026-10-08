@@ -7,6 +7,7 @@ import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.EHRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -38,5 +39,9 @@ public class EHService {
 
     public List<EventoHistorico> getByImportance(ImportanciaEH importancia) {
         return repository.getEventoHistoricoByImportanciaAndIsDeletedFalse(importancia);
+    }
+
+    public List<EventoHistorico> getByPeriod(LocalDate inicio, LocalDate fim) {
+        return repository.getEventoHistoricoByDataInicioBetween(inicio, fim);
     }
 }

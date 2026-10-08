@@ -4,6 +4,7 @@ import br.edu.infnet.continuum.domain.enums.ImportanciaEH;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,10 +22,10 @@ public class EventoHistorico {
     private String descricao;
 
     @Column(nullable = false)
-    private LocalDateTime dataInicio;
+    private LocalDate dataInicio;
 
     @Column(nullable = false)
-    private LocalDateTime dataFim;
+    private LocalDate dataFim;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

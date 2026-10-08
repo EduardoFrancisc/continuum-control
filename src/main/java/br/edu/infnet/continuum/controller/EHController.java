@@ -6,6 +6,8 @@ import br.edu.infnet.continuum.service.EHService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,17 @@ public class EHController {
         return service.getByImportance(importancia);
     }
 
+    @GetMapping("/periodo")
+    public List<EventoHistorico> getByPeriod(
+            @RequestParam("inicio") LocalDate inicio,
+            @RequestParam("fim") LocalDate fim) {
+        return service.getByPeriod(inicio, fim);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<EventoHistorico> delete(@PathVariable Long id) {
         return ResponseEntity.ok(service.delete(id));
     }
+
+    //Falta criar o create e o put, mas faz sentido? avaliar depois
 }

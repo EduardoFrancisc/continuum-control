@@ -59,6 +59,15 @@ public class GlobalExceptionHandler {
             );
         }
 
+        if(ex.getRequiredType() == EstadoMissao.class){
+            return Map.of("timestamp", LocalDateTime.now(),
+                    "status", HttpStatus.BAD_REQUEST.value(),
+                    "error", "Bad Request",
+                    "message", "Tipos de estado aceitos: PLANEJADA, AUTORIZADA, EM_EXECUÇÃO, CONCLUÍDA, CANCELADA, FALHOU"
+            );
+        }
+
+
 
 
         return Map.of("timestamp", LocalDateTime.now(),

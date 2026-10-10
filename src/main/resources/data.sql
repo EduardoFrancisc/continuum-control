@@ -1,4 +1,6 @@
---Agentes
+-- ============================================================================
+-- Agents (agentes)
+-- ============================================================================
 INSERT INTO agentes (nome, especialidade, situacao, is_deleted)
 VALUES ('John Carl', 'ANALISE_HISTORICA', 'INATIVO', false);
 
@@ -59,7 +61,21 @@ VALUES ('Thiago Ramos', 'INVESTIGACAO', 'EM_MISSÃO', false);
 INSERT INTO agentes (nome, especialidade, situacao, is_deleted)
 VALUES ('Larissa Barbosa', 'ENGENHARIA_TEMPORAL', 'DISPONÍVEL', false);
 
---Eventos
+INSERT INTO agentes (nome, especialidade, situacao, is_deleted)
+VALUES ('Eduardo Nunes', 'INVESTIGACAO', 'DISPONÍVEL', false);
+
+INSERT INTO agentes (nome, especialidade, situacao, is_deleted)
+VALUES ('Patrícia Andrade', 'ANALISE_HISTORICA', 'DISPONÍVEL', false);
+
+INSERT INTO agentes (nome, especialidade, situacao, is_deleted)
+VALUES ('Ricardo Teixeira', 'ENGENHARIA_TEMPORAL', 'EM_MISSÃO', false);
+
+INSERT INTO agentes (nome, especialidade, situacao, is_deleted)
+VALUES ('Sofia Cavalcante', 'CONTENCAO_FISICA', 'DISPONÍVEL', false);
+
+-- ============================================================================
+-- Eventos históricos (eventos_historicos)
+-- ============================================================================
 INSERT INTO eventos_historicos (nome, descricao, data_inicio, data_fim, importancia, is_deleted)
 VALUES ('Descobrimento do Brasil',
         'Chegada da frota portuguesa ao território brasileiro.',
@@ -180,7 +196,33 @@ VALUES ('Plano Real',
         'BAIXA',
         false);
 
---Anomalias
+INSERT INTO eventos_historicos (nome, descricao, data_inicio, data_fim, importancia, is_deleted)
+VALUES ('Confederação da Tordesilhas',
+        'Tratado firmado entre Portugal e Espanha que dividiu as terras discoveries entre as duas coroas.',
+        '1494-06-07',
+        '1494-06-07',
+        'CRÍTICA',
+        false);
+
+INSERT INTO eventos_historicos (nome, descricao, data_inicio, data_fim, importancia, is_deleted)
+VALUES ('Revolta da Armada',
+        'Movimento de oficiais da Marinha contra o governo de Floriano Peixoto.',
+        '1893-09-23',
+        '1894-03-11',
+        'MODERADA',
+        false);
+
+INSERT INTO eventos_historicos (nome, descricao, data_inicio, data_fim, importancia, is_deleted)
+VALUES ('Proclamação da Independência Argentina',
+        'Proclamação da República de Tucumán, na Argentina, que rompia com a monarquia espanhola.',
+        '1816-07-09',
+        '1816-07-09',
+        'BAIXA',
+        false);
+
+-- ============================================================================
+-- Anomalias (anomalias)
+-- ============================================================================
 INSERT INTO anomalias (
     evento_id,
     nome,
@@ -312,4 +354,200 @@ INSERT INTO anomalias (
           'As características identificadas indicam possível adulteração documental que não pode ser revertida no registro original.',
           TRUE,
           FALSE
+      ),
+      (
+          11,
+          'Margem temporal incorreta',
+          'O período de duração do evento está menor do que o previsto nas fontes consultadas.',
+          '2025-07-02',
+          'MODERADO',
+          'DETECTADA',
+          'Crônica setecentista',
+          'Reconstruir o cronograma completo do conflito a partir dos relatos disponíveis.',
+          TRUE,
+          FALSE
+      ),
+      (
+          12,
+          'Divergência geopolítica',
+          'As fronteiras citadas no evento não correspondem à cartografia histórica do período.',
+          '2025-07-28',
+          'ALTO',
+          'EM_ANÁLISE',
+          'Mapa de época',
+          'A cartografia do século XVIII apresenta limites diferentes dos registrados na base de dados.',
+          TRUE,
+          FALSE
+      ),
+      (
+          13,
+          'Lacuna na cadeia de custódia',
+          'Não há registro de rastreabilidade entre a digitalização e o documento físico.',
+          '2025-08-09',
+          'MODERADO',
+          'CONFIRMADA',
+          'Arquivo morto',
+          'A cadeia de custódia foi rompida durante a restauração do acervo.',
+          TRUE,
+          FALSE
+      ),
+      (
+          14,
+          'Registro inexistente no acervo',
+          'O documento citado como fonte do evento não consta no acervo digital atual.',
+          '2025-09-01',
+          'BAIXO',
+          'EM_CORREÇÃO',
+          'Acervo digital',
+          'Solicitado o reinstatement temporário da ficha física para conferência.',
+          TRUE,
+          FALSE
+      ),
+      (
+          15,
+          'Metadados corrompidos',
+          'Os metadados de digitalização apresentam valores fora do padrão esperado para a época.',
+          '2025-09-23',
+          'ALTO',
+          'DETECTADA',
+          'Servidor de arquivamento',
+          'Recuperar os metadados originais a partir do backup do servidor de armazenamento.',
+          TRUE,
+          FALSE
+      ),
+      (
+          16,
+          'Classificação de risco alterada',
+          'A importância atribuída ao evento diverge da classificação oficial vigente no período.',
+          '2025-10-07',
+          'CRÍTICO',
+          'EM_ANÁLISE',
+          'Norma historiográfica',
+          'Aguardando parecer do conselho histórico antes de qualquer correção definitiva.',
+          TRUE,
+          FALSE
       );
+
+-- ============================================================================
+-- Missões (missoes)
+-- ============================================================================
+-- Insert na tabela principal de missões
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (1, 'Investigar anacronismo', 'Roma Antiga, 476 d.C.', 'ALTA', 'PLANEJADA', '2026-10-15', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (2, 'Confirmar identidade do(signatário', 'Salvador, Bahia, 1822', 'EMERGÊNCIA', 'EM_EXECUÇÃO', '2026-09-01', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (3, 'Deduplicar documento digital', 'Acervo digital, data atual', 'NORMAL', 'AUTORIZADA', '2026-08-20', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (4, 'Reconhecer local do acontecimento', 'Interior de Minas, 1789', 'ALTA', 'PLANEJADA', '2026-11-05', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (5, 'Reconstruir cronologia oficial', 'Rio de Janeiro, 1930', 'EMERGÊNCIA', 'EM_EXECUÇÃO', '2026-07-12', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (6, 'Localizar documentação complementar', 'Arquivo Nacional, data atual', 'BAIXA', 'CONCLUÍDA', '2026-05-02', '2026-06-18', false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (7, 'Arbitrar versões contraditórias', 'São Paulo, 1964', 'ALTA', 'EM_EXECUÇÃO', '2026-08-01', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (8, 'Validar autoria do documento', 'Biblioteca Nacional, data atual', 'NORMAL', 'AUTORIZADA', '2026-09-15', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (9, 'Corrigir data de nascimento', 'Cartório civil, data atual', 'BAIXA', 'CONCLUÍDA', '2026-04-10', '2026-05-22', false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (10, 'Periciar possível falsificação', 'Arquivo histórico, data atual', 'EMERGÊNCIA', 'EM_EXECUÇÃO', '2026-06-30', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (11, 'Estender janela temporal do evento', 'Canudos, Bahia, 1897', 'NORMAL', 'PLANEJADA', '2026-12-01', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (12, 'Comparar cartografias históricas', 'Niterói, Rio de Janeiro, 1889', 'ALTA', 'AUTORIZADA', '2026-10-08', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (13, 'Recuperar cadeia de custódia', 'Arquivo morto, data atual', 'ALTA', 'EM_EXECUÇÃO', '2026-09-28', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (14, 'Reinserir ficha no acervo digital', 'Acervo institucional, data atual', 'BAIXA', 'CANCELADA', '2026-07-06', NULL, true);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (15, 'Reprocessar metadados corrompidos', 'Servidor de arquivamento, data atual', 'NORMAL', 'FALHOU', '2026-03-03', NULL, false);
+
+INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
+VALUES (16, 'Revisar classificação de importância', 'Conselho histórico, data atual', 'EMERGÊNCIA', 'PLANEJADA', '2026-11-20', NULL, false);
+
+-- ============================================================================
+-- Tabela associativa missoes_agentes (gerada pelo JPA)
+-- ============================================================================
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (1, 1),
+       (1, 2);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (2, 3),
+       (2, 4),
+       (2, 9);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (3, 7),
+       (3, 12);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (4, 4),
+       (4, 10);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (5, 6),
+       (5, 15),
+       (5, 19);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (6, 1),
+       (6, 14);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (7, 13),
+       (7, 18);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (8, 7),
+       (8, 22);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (9, 5),
+       (9, 16);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (10, 6),
+       (10, 10),
+       (10, 20);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (11, 3),
+       (11, 11);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (12, 4),
+       (12, 13),
+       (12, 23);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (13, 8),
+       (13, 17);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (14, 3),
+       (14, 9);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (15, 15),
+       (15, 24);
+
+INSERT INTO missoes_agentes (missao_id, agentes_id)
+VALUES (16, 2),
+       (16, 19),
+       (16, 21);

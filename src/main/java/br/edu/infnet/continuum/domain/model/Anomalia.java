@@ -43,5 +43,8 @@ public class Anomalia {
     private String observacoes;
 
     @Column(nullable = false)
+    private Boolean isActive = true;
+
+    @Column(nullable = false)
     private Boolean isDeleted = false;
 }

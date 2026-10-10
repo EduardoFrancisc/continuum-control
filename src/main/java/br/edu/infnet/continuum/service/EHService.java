@@ -24,7 +24,7 @@ public class EHService {
 
     public EventoHistorico getById(Long id) {
         return repository.findById(id).orElseThrow(
-                () -> new EntidadeNaoLocalizada("Evento Historico "+id+" não encontrado.")
+                () -> new EntidadeNaoLocalizada("Evento Historico "+id+" não encontrado(a).")
         );
     }
 

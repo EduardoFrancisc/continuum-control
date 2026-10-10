@@ -1,8 +1,6 @@
 package br.edu.infnet.continuum.exception;
 
-import br.edu.infnet.continuum.domain.enums.EspecialidadeAgente;
-import br.edu.infnet.continuum.domain.enums.ImportanciaEH;
-import br.edu.infnet.continuum.domain.enums.SituacaoAgente;
+import br.edu.infnet.continuum.domain.enums.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,6 +42,24 @@ public class GlobalExceptionHandler {
                     "message", "Tipos de importância aceitas: BAIXA, MODERADA, ALTA, CRÍTICA"
             );
         }
+
+        if(ex.getRequiredType() == RiscoAnomalia.class){
+            return Map.of("timestamp", LocalDateTime.now(),
+                    "status", HttpStatus.BAD_REQUEST.value(),
+                    "error", "Bad Request",
+                    "message", "Tipos de risco aceitos: BAIXO, MODERADO, ALTO, CRÍTICO"
+            );
+        }
+
+        if(ex.getRequiredType() == EstadoAnomalia.class){
+            return Map.of("timestamp", LocalDateTime.now(),
+                    "status", HttpStatus.BAD_REQUEST.value(),
+                    "error", "Bad Request",
+                    "message", "Tipos de estado aceitos: DETECTADA, EM_ANÁLISE, CONFIRMADA, EM_CORREÇÃO, ESTABILIZADA, IRREVERSÍVEL"
+            );
+        }
+
+
 
         return Map.of("timestamp", LocalDateTime.now(),
                 "status", HttpStatus.BAD_REQUEST.value(),

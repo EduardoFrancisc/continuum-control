@@ -181,93 +181,135 @@ VALUES ('Plano Real',
         false);
 
 --Anomalias
-INSERT INTO anomalias
-(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
-VALUES
-    (1,
-     'Alteração de data',
-     'A data registrada no sistema diverge da data encontrada no documento original.',
-     '2026-01-15',
-     'ALTO',
-     'DETECTADA',
-     'Sistema',
-     'A divergência foi identificada durante uma validação automática.',
-     false);
-
-INSERT INTO anomalias
-(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
-VALUES
-    (2,
-     'Valor inconsistente',
-     'O valor registrado para o evento não corresponde ao valor encontrado na documentação.',
-     '2026-02-03',
-     'CRÍTICO',
-     'EM_ANÁLISE',
-     'Auditoria',
-     'A inconsistência está sendo analisada pela equipe responsável.',
-     false);
-
-INSERT INTO anomalias
-(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
-VALUES
-    (3,
-     'Documento ausente',
-     'Documento obrigatório relacionado ao evento não foi localizado.',
-     '2026-02-20',
-     'MODERADO',
-     'DETECTADA',
-     'Importação',
-     'O documento deverá ser localizado ou anexado ao registro.',
-     false);
-
-INSERT INTO anomalias
-(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
-VALUES
-    (1,
-     'Responsável divergente',
-     'O responsável registrado no evento é diferente do responsável indicado na documentação.',
-     '2026-03-01',
-     'BAIXO',
-     'CONFIRMADA',
-     'Análise manual',
-     'A divergência foi confirmada após análise dos documentos disponíveis.',
-     false);
-
-INSERT INTO anomalias
-(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
-VALUES
-    (4,
-     'Evento duplicado',
-     'Foram identificados registros possivelmente referentes ao mesmo evento histórico.',
-     '2026-03-12',
-     'ALTO',
-     'EM_CORREÇÃO',
-     'Sistema',
-     'Os registros duplicados estão sendo analisados para correção.',
-     false);
-
-INSERT INTO anomalias
-(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
-VALUES
-    (5,
-     'Informação incompleta',
-     'O registro do evento possui informações importantes ausentes.',
-     '2026-04-05',
-     'MODERADO',
-     'ESTABILIZADA',
-     'Importação',
-     'A inconsistência foi tratada e o registro encontra-se estável.',
-     false);
-
-INSERT INTO anomalias
-(evento_id, nome, divergencia, data_deteccao, risco, estado, origem, observacoes, is_deleted)
-VALUES
-    (6,
-     'Origem desconhecida',
-     'Não foi possível determinar a origem do registro histórico.',
-     '2026-04-18',
-     'BAIXO',
-     'IRREVERSÍVEL',
-     NULL,
-     'A origem da informação não pôde ser determinada e não há dados suficientes para correção.',
-     false);
+INSERT INTO anomalias (
+    evento_id,
+    nome,
+    divergencia,
+    data_deteccao,
+    risco,
+    estado,
+    origem,
+    observacoes,
+    is_active,
+    is_deleted
+) VALUES
+      (
+          1,
+          'Inconsistência temporal',
+          'A data do evento diverge dos registros históricos conhecidos.',
+          '2025-01-15',
+          'ALTO',
+          'DETECTADA',
+          'Arquivo histórico',
+          'Necessário revisar os documentos originais para confirmar a data correta.',
+          TRUE,
+          FALSE
+      ),
+      (
+          2,
+          'Alteração de identidade',
+          'O nome registrado diverge dos documentos históricos associados ao indivíduo.',
+          '2025-02-03',
+          'CRÍTICO',
+          'EM_ANÁLISE',
+          'Registro civil',
+          'Existem registros com nomes diferentes associados ao mesmo indivíduo.',
+          TRUE,
+          FALSE
+      ),
+      (
+          3,
+          'Documento duplicado',
+          'Dois documentos apresentam conteúdo semelhante, mas identificadores diferentes.',
+          '2025-02-18',
+          'MODERADO',
+          'DETECTADA',
+          'Arquivo digital',
+          'Verificar se a duplicidade foi causada por erro de digitalização.',
+          TRUE,
+          FALSE
+      ),
+      (
+          4,
+          'Localização divergente',
+          'O local informado no evento difere do local mencionado em outras fontes.',
+          '2025-03-10',
+          'ALTO',
+          'EM_ANÁLISE',
+          'Relato testemunhal',
+          'Comparar os relatos disponíveis e verificar possíveis alterações nos limites territoriais.',
+          TRUE,
+          FALSE
+      ),
+      (
+          5,
+          'Cronologia inconsistente',
+          'A sequência dos acontecimentos não corresponde à cronologia documentada.',
+          '2025-03-22',
+          'CRÍTICO',
+          'CONFIRMADA',
+          'Pesquisa documental',
+          'A inconsistência foi confirmada após a comparação de múltiplas fontes históricas.',
+          TRUE,
+          FALSE
+      ),
+      (
+          6,
+          'Ausência de documentação',
+          'Não foram encontrados documentos que comprovem uma informação registrada no evento.',
+          '2025-04-05',
+          'BAIXO',
+          'ESTABILIZADA',
+          'Acervo institucional',
+          'A documentação complementar foi localizada e anexada ao registro histórico.',
+          TRUE,
+          FALSE
+      ),
+      (
+          7,
+          'Informação contraditória',
+          'Duas fontes apresentam versões incompatíveis sobre o mesmo acontecimento.',
+          '2025-04-17',
+          'ALTO',
+          'EM_CORREÇÃO',
+          'Jornal da época',
+          'Os registros estão sendo revisados para determinar qual versão apresenta maior consistência.',
+          TRUE,
+          FALSE
+      ),
+      (
+          8,
+          'Registro de autoria incorreta',
+          'A autoria atribuída ao documento diverge da identificação encontrada no arquivo original.',
+          '2025-05-02',
+          'MODERADO',
+          'DETECTADA',
+          'Catálogo documental',
+          'Aguardando validação da autoria por especialista em documentos históricos.',
+          TRUE,
+          FALSE
+      ),
+      (
+          9,
+          'Data de nascimento incompatível',
+          'A data de nascimento registrada não corresponde à idade informada em outro documento.',
+          '2025-05-19',
+          'BAIXO',
+          'ESTABILIZADA',
+          NULL,
+          'A data foi corrigida após consulta ao registro civil original.',
+          TRUE,
+          FALSE
+      ),
+      (
+          10,
+          'Possível falsificação documental',
+          'Foram identificadas diferenças na assinatura e na formatação do documento analisado.',
+          '2025-06-11',
+          'CRÍTICO',
+          'IRREVERSÍVEL',
+          'Análise pericial',
+          'As características identificadas indicam possível adulteração documental que não pode ser revertida no registro original.',
+          TRUE,
+          FALSE
+      );

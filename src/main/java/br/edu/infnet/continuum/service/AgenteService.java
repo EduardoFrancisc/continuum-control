@@ -25,7 +25,7 @@ public class AgenteService {
 
     public Agente getById(Long id) {
         return repository.findById(id).orElseThrow(
-                () -> new EntidadeNaoLocalizada("Agente "+id+" não encontrado.")
+                () -> new EntidadeNaoLocalizada("Agente "+id+" não encontrado(a).")
         );
     }
 

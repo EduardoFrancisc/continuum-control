@@ -1,7 +1,6 @@
 package br.edu.infnet.continuum.service;
 
 import br.edu.infnet.continuum.domain.model.EncerramentoMissoes;
-import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.EMRepository;
 import org.springframework.stereotype.Service;

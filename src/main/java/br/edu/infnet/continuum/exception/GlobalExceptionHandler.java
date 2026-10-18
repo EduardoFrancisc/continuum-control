@@ -89,10 +89,38 @@ public class GlobalExceptionHandler {
                         "message", "Tipos de especialidade aceitas: INVESTIGACAO, CONTENCAO_FISICA, ANALISE_HISTORICA, ENGENHARIA_TEMPORAL"
                 );
             }
+            if (i.getTargetType() == TipoEvidencia.class) {
+                return Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "error", "Bad Request",
+                        "message", "Tipos de evidência aceitos: FISICA, DOCUMENTAL, DIGITAL, BIOLOGICA, ENERGETICA, TEMPORAL"
+                );
+            }
+
+            if (i.getTargetType() == EstadoIntegridade.class) {
+                return Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "error", "Bad Request",
+                        "message", "Estados de integridade aceitos: INTACTA, DANIFICADA, DEGRADADA, FRAGMENTADA, CORROMPIDA, DESCONHECIDA"
+                );
+            }
         }
         return Map.of("timestamp", LocalDateTime.now(),
                 "status", HttpStatus.NOT_ACCEPTABLE.value(),
                 "error", "Not Acceptable",
+                "message", ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleIllegalArgument(IllegalArgumentException ex) {
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "error", "Bad Request",
                 "message", ex.getMessage()
         );
     }

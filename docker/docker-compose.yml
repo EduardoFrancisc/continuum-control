@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: continuum-control
+    container_name: continuum-postgres
     ports:
       - "5432:5432"
     environment:
@@ -11,5 +11,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  mongodb:
+    image: mongo:8
+    container_name: continuum-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    volumes:
+      - mongodb_data:/data/db
+
 volumes:
   postgres_data:
+  mongodb_data:

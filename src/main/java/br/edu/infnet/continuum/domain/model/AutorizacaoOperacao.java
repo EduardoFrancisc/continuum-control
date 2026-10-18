@@ -14,14 +14,15 @@ public class AutorizacaoOperacao {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "missao_id", nullable = false)
+    @JoinColumn(name = "missao_id", nullable = false, unique = true)
     private Missao missao;
 
-    @Column(nullable = false)
-    private String responsavel;
+    @ManyToOne()
+    @JoinColumn(name = "responsavel_id", nullable = false)
+    private Usuario responsavel;
 
     @Column(nullable = false)
-    private LocalDateTime instante;
+    private LocalDateTime instante = LocalDateTime.now();
 
     @Column(nullable = false)
     private String observacao;

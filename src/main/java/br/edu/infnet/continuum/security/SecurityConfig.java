@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 //Autenticação Stateless - token
 //Autenticação Statefull - armazenamento se sessão
-
+// video base da parte de segurança - https://www.youtube.com/watch?v=5w-YCcOjPD0
 
 @Configuration
 @EnableWebSecurity

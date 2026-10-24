@@ -15,7 +15,6 @@ public class EMService {
         this.repository = repository;
     }
 
-
     public List<EncerramentoMissoes> getAll() {
         return repository.findAll();
     }

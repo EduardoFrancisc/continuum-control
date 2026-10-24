@@ -3,6 +3,7 @@ package br.edu.infnet.continuum.controller;
 import br.edu.infnet.continuum.domain.enums.EstadoAnomalia;
 import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
 import br.edu.infnet.continuum.domain.model.Anomalia;
+import br.edu.infnet.continuum.dtos.AnomaliaHistoricoDTO;
 import br.edu.infnet.continuum.service.AnomaliaService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,11 @@ public class AnomaliaController {
     @GetMapping("/risco/{risco}")
     public List<Anomalia> getByLevelRisc(@PathVariable RiscoAnomalia risco){
         return service.getByLevelRisc(risco);
+    }
+
+    @GetMapping("/historico/{id}")
+    public AnomaliaHistoricoDTO getAnomalyByHistory(@PathVariable Long id){
+        return service.getAnomalyByHistory(id);
     }
 
 

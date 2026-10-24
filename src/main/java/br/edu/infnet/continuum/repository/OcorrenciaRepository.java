@@ -8,5 +8,4 @@ import java.util.List;
 public interface OcorrenciaRepository extends MongoRepository<Ocorrencia, String> {
     List<Ocorrencia> getOcorrenciaByMissaoId(Long id);
     List<Ocorrencia> getOcorrenciaByAutorId(Long id);
-
 }

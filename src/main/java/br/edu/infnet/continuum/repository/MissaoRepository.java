@@ -19,4 +19,6 @@ public interface MissaoRepository extends JpaRepository<Missao, Long> {
             "WHERE agente.id = :agenteId"
     )
     List<Missao> getByAgent(@Param("agenteId") Long agenteId);
+
+    Integer countMissaoByEstado(EstadoMissao estado);
 }

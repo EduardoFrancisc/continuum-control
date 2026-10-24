@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -26,7 +27,7 @@ public class Anomalia {
     private String divergencia;
 
     @Column(nullable = false)
-    private LocalDate dataDeteccao;
+    private LocalDateTime dataDeteccao;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -126,10 +126,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntidadeNaoLocalizada.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> handleEntidadeValidation(EntidadeNaoLocalizada ex){
         return Map.of("timestamp", LocalDateTime.now(),
-                "status", HttpStatus.BAD_REQUEST.value(),
+                "status", HttpStatus.NOT_FOUND.value(),
                 "error", "Not Acceptable",
                 "message", ex.getMessage()
         );

@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/encerramento")
-public class EMController {
+public class EMController {//EncerramentoMissão
 
     private EMService service;
 

@@ -66,14 +66,13 @@ public class AnomaliaService {
 
         Optional<EncerramentoMissoes> em = eMRepository.findById(id);
 
-        EncerramentoResumo encerramentoResumo = em
-                .map(e -> new EncerramentoResumo(
+        EncerramentoResumo encerramentoResumo = em.map(e -> new EncerramentoResumo(
                         e.getId(),
                         e.getResultado(),
                         e.getImpacto(),
                         e.getSituacaoAnomalia(),
                         e.getResumo()
-                )).orElse(null);
+        )).orElse(null);
 
         List<Long> ids_missoes = new ArrayList<>();
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/evento")
-public class EHController {
+public class EHController { //EventoHistórico
     private final EHService service;
 
     public EHController(EHService service) {

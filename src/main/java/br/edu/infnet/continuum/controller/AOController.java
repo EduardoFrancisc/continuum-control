@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/autorizar-operacoes")
-public class AOController {
+public class AOController { //AutorizaçãoOperação
 
     private final AOService service;
 

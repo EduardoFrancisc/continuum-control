@@ -1,16 +1,14 @@
 
 package br.edu.infnet.continuum.service;
 
-import br.edu.infnet.continuum.domain.enums.*;
 import br.edu.infnet.continuum.domain.model.Ocorrencia;
-import br.edu.infnet.continuum.dtos.OcorrenciaCreateDTO;
+import br.edu.infnet.continuum.domain.model.ocorrencias.*;
+import br.edu.infnet.continuum.dtos.ocorrencias.*;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.OcorrenciaRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class OcorrenciaService {
@@ -60,205 +58,142 @@ public class OcorrenciaService {
         return ocorrencias;
     }
 
-
     public Ocorrencia create(OcorrenciaCreateDTO dto) {
 
-        Ocorrencia ocorrencia = new Ocorrencia();
+        missaoService.getById(dto.getMissaoId());
+        agenteService.getById(dto.getAutorId());
+
+        Ocorrencia ocorrencia;
+
+        switch (dto.getTipo()) {
+            case DISTORÇÃO_TEMPORAL -> {
+                DistorcaoTemporalDTO d = (DistorcaoTemporalDTO) dto;// nem todo tipo de ocorrenciadto é uma dist, etc.
+
+                if (d.getDataFim().isBefore(d.getDataInicio())) {
+                    throw new IllegalArgumentException("A data final não pode ser anterior a data inicial.");
+                }
+
+                DistorcaoTemporal distorcao = new DistorcaoTemporal();
+                distorcao.setIntensidade(d.getIntensidade());
+                distorcao.setDataInicio(d.getDataInicio());
+                distorcao.setDataFim(d.getDataFim());
+                distorcao.setLocalOcorrencia(d.getLocalOcorrencia());
+                distorcao.setRaioImpacto(d.getRaioImpacto());
+                distorcao.setEstabilidade(d.getEstabilidade());
+                distorcao.setEfeitosObservados(d.getEfeitosObservados());
+                distorcao.setRiscoEstimado(d.getRiscoEstimado());
+
+                ocorrencia = distorcao; //todo tipo é uma ocorrencia
+
+            }
+
+            case OBSERVAÇÃO_HISTÓRICA -> {
+                ObservacaoHistoricaDTO o = (ObservacaoHistoricaDTO) dto;
+
+                if (o.getGrauConfiabilidade() < 0 || o.getGrauConfiabilidade() > 1) {
+                    throw new IllegalArgumentException("O grau de confiabilidade deve estar entre 0 e 1.");
+                }
+
+                ObservacaoHistorica obs = new ObservacaoHistorica();
+                obs.setPeriodoHistorico(o.getPeriodoHistorico());
+                obs.setFonteHistorica(o.getFonteHistorica());
+                obs.setDataObservacao(o.getDataObservacao());
+                obs.setLocalHistorico(o.getLocalHistorico());
+                obs.setGrauConfiabilidade(o.getGrauConfiabilidade());
+                obs.setRelevanciaHistorica(o.getRelevanciaHistorica());
+
+                ocorrencia = obs;
+            }
+
+            case EVIDÊNCIA_TEMPORAL -> {
+                EvidenciaTemporalDTO e = (EvidenciaTemporalDTO) dto;
+
+                agenteService.getById(e.getResponsavelColeta()); //verificar se o responsavel existe
+
+                EvidenciaTemporal evidencia = new EvidenciaTemporal();
+                evidencia.setObjeto(e.getObjeto());
+                evidencia.setPeriodoEstimado(e.getPeriodoEstimado());
+                evidencia.setGrauConfiabilidade(e.getGrauConfiabilidade());
+                evidencia.setTipoEvidencia(e.getTipoEvidencia());
+                evidencia.setLocalEncontrado(e.getLocalEncontrado());
+                evidencia.setDataColeta(e.getDataColeta());
+                evidencia.setResponsavelColeta(e.getResponsavelColeta());
+                evidencia.setIntegridade(e.getIntegridade());
+                evidencia.setOrigemEstimada(e.getOrigemEstimada());
+
+                ocorrencia = evidencia;
+            }
+
+            case ALTERAÇÃO_DETECTADA -> {
+                AlteracaoDetectadaDTO a = (AlteracaoDetectadaDTO) dto;
+                if (a.getGrauAnomalia() < 0) {
+                    throw new IllegalArgumentException("O grau de anomalia não pode ser negativo.");
+                }
+                AlteracaoDetectada alt = new AlteracaoDetectada();
+                alt.setElementoAfetado(a.getElementoAfetado());
+                alt.setTipoAlteracao(a.getTipoAlteracao());
+                alt.setEstadoAnterior(a.getEstadoAnterior());
+                alt.setEstadoAtual(a.getEstadoAtual());
+                alt.setDataDeteccao(a.getDataDeteccao());
+                alt.setOrigemDetectada(a.getOrigemDetectada());
+                alt.setGrauAnomalia(a.getGrauAnomalia());
+                ocorrencia = alt;
+            }
+
+            case ENCONTRO_INESPERADO -> {
+                EncontroInesperadoDTO enc = (EncontroInesperadoDTO) dto;
+
+                EncontroInesperado encontro = new EncontroInesperado();
+                encontro.setEncontrado(enc.getEncontrado());
+                encontro.setOnde(enc.getOnde());
+                encontro.setComo(enc.getComo());
+                encontro.setData(enc.getData());
+                encontro.setTipoEncontro(enc.getTipoEncontro());
+                encontro.setHostilidade(enc.getHostilidade());
+                encontro.setCondicaoEncontrado(enc.getCondicaoEncontrado());
+                encontro.setInteracao(enc.getInteracao());
+                encontro.setResultadoEncontro(enc.getResultadoEncontro());
+                encontro.setNivelAmeaca(enc.getNivelAmeaca());
+
+                ocorrencia = encontro;
+            }
+
+            case INCIDENTE_OPERACIONAL -> {
+                IncidenteOperacionalDTO inc = (IncidenteOperacionalDTO) dto;
+
+                if (inc.getNumeroFatalidades() < 0 || inc.getNumeroFeridos() < 0) {
+                    throw new IllegalArgumentException("O número de fatalidades e feridos não pode ser negativo.");
+                }
+
+                if (inc.getDataFim().isBefore(inc.getDataInicio())) {
+                    throw new IllegalArgumentException("A data final não pode ser anterior à data inicial.");
+                }
+
+                IncidenteOperacional incidente = new IncidenteOperacional();
+                incidente.setTitulo(inc.getTitulo());
+                incidente.setNumeroFatalidades(inc.getNumeroFatalidades());
+                incidente.setNumeroFeridos(inc.getNumeroFeridos());
+                incidente.setIntensidade(inc.getIntensidade());
+                incidente.setTipoIncidente(inc.getTipoIncidente());
+                incidente.setDataInicio(inc.getDataInicio());
+                incidente.setDataFim(inc.getDataFim());
+                incidente.setDanosMateriais(inc.getDanosMateriais());
+                incidente.setImpactoMissao(inc.getImpactoMissao());
+                incidente.setStatusResolucao(inc.getStatusResolucao());
+                incidente.setMedidasAdotadas(inc.getMedidasAdotadas());
+
+                ocorrencia = incidente;
+            }
+            default -> throw new IllegalArgumentException("Tipo de ocorrência inexistente: "+dto.getTipo());
+        }
 
         ocorrencia.setTipo(dto.getTipo());
         ocorrencia.setMissaoId(dto.getMissaoId());
         ocorrencia.setAutorId(dto.getAutorId());
         ocorrencia.setObservacoes(dto.getObservacoes());
-        ocorrencia.setDadosEspecificos(dto.getDadosEspecificos());
-
-        missaoService.getById(ocorrencia.getMissaoId());
-        agenteService.getById(ocorrencia.getAutorId());
-
-        switch (ocorrencia.getTipo()){
-            case DISTORÇÃO_TEMPORAL -> {
-                Map<String, Object> dados = ocorrencia.getDadosEspecificos();
-
-                if (dados == null
-                        || dados.get("intensidade") == null
-                        || dados.get("data_inicio") == null
-                        || dados.get("data_fim") == null
-                        || dados.get("local_ocorrencia") == null
-                        || dados.get("raio_impacto") == null
-                        || dados.get("estabilidade") == null
-                        || dados.get("efeitos_observados") == null
-                        || dados.get("risco_estimado") == null) {
-                    throw new IllegalArgumentException(
-                            "Preencha todos os campos da distorção temporal."
-                    );
-                }
-
-                LocalDateTime inicio = (LocalDateTime) dados.get("data_inicio");
-                LocalDateTime fim = (LocalDateTime) dados.get("data_fim");
-
-                if (fim.isBefore(inicio)) {
-                    throw new IllegalArgumentException("A data final não pode ser anterior à data inicial.");
-                }
-            }
-
-            case EVIDÊNCIA_TEMPORAL -> {
-                Map<String, Object> dados = ocorrencia.getDadosEspecificos();
-
-                if (dados == null
-                        || dados.get("objeto") == null
-                        || dados.get("periodo_estimado") == null
-                        || dados.get("grau_confiabilidade") == null
-                        || dados.get("tipo_evidencia") == null
-                        || dados.get("local_encontrado") == null
-                        || dados.get("data_coleta") == null
-                        || dados.get("responsavel_coleta") == null
-                        || dados.get("integridade") == null
-                        || dados.get("origem_estimada") == null) {
-                    throw new IllegalArgumentException(
-                            "Preencha todos os campos da evidência temporal."
-                    );
-                }
-
-                Long responsavelId = ((Number) dados.get("responsavel_coleta")).longValue();
-                agenteService.getById(responsavelId);
-            }
-
-            case ALTERAÇÃO_DETECTADA -> {
-                Map<String, Object> dados = ocorrencia.getDadosEspecificos();
-
-                if (dados == null
-                        || dados.get("elemento_afetado") == null
-                        || dados.get("tipo_alteracao") == null
-                        || dados.get("estado_anterior") == null
-                        || dados.get("estado_atual") == null
-                        || dados.get("data_deteccao") == null
-                        || dados.get("origem_detectada") == null
-                        || dados.get("grau_anomalia") == null) {
-
-                    throw new IllegalArgumentException(
-                            "Preencha todos os campos da alteração detectada."
-                    );
-                }
-
-                TipoAlteracao.valueOf(dados.get("tipo_alteracao").toString());
-
-                LocalDateTime.parse(dados.get("data_deteccao").toString());
-
-                Float grauAnomalia = ((Number) dados.get("grau_anomalia")).floatValue();
-            }
-            case ENCONTRO_INESPERADO -> {
-                Map<String, Object> dados = ocorrencia.getDadosEspecificos();
-
-                if (dados == null
-                        || dados.get("encontrado") == null
-                        || dados.get("onde") == null
-                        || dados.get("como") == null
-                        || dados.get("data") == null
-                        || dados.get("tipo_encontro") == null
-                        || dados.get("hostilidade") == null
-                        || dados.get("condicao_encontrado") == null
-                        || dados.get("interacao") == null
-                        || dados.get("resultado_encontro") == null
-                        || dados.get("nivel_ameaca") == null
-                        || dados.get("observacoes") == null) {
-
-                    throw new IllegalArgumentException(
-                            "Preencha todos os campos do encontro inesperado."
-                    );
-                }
-
-                LocalDateTime.parse(dados.get("data").toString()
-                );
-
-                TipoEncontro.valueOf(dados.get("tipo_encontro").toString()
-                );
-
-                NivelHostilidade.valueOf(dados.get("hostilidade").toString()
-                );
-
-                NivelRisco.valueOf(dados.get("nivel_ameaca").toString()
-                );
-
-                Boolean.parseBoolean(dados.get("interacao").toString()
-                );
-            }
-            case OBSERVAÇÃO_HISTÓRICA -> {
-                Map<String, Object> dados = ocorrencia.getDadosEspecificos();
-
-                if (dados == null
-                        || dados.get("periodo_historico") == null
-                        || dados.get("fonte_historica") == null
-                        || dados.get("data_observacao") == null
-                        || dados.get("local_historico") == null
-                        || dados.get("grau_confiabilidade") == null
-                        || dados.get("relevancia_historica") == null) {
-
-                    throw new IllegalArgumentException(
-                            "Preencha todos os campos da observação histórica."
-                    );
-                }
-
-                LocalDateTime.parse(dados.get("data_observacao").toString()
-                );
-
-                Float confiabilidade = ((Number) dados.get("grau_confiabilidade")).floatValue();
-
-                if (confiabilidade < 0 || confiabilidade > 1) {
-                    throw new IllegalArgumentException(
-                            "O grau de confiabilidade deve estar entre 0 e 1."
-                    );
-                }
-
-                RelevanciaHistorica.valueOf(dados.get("relevancia_historica").toString());
-            }
-            case INCIDENTE_OPERACIONAL -> {
-                Map<String, Object> dados = ocorrencia.getDadosEspecificos();
-
-                if (dados == null
-                        || dados.get("numero_fatalidades") == null
-                        || dados.get("intensidade") == null
-                        || dados.get("titulo") == null
-                        || dados.get("tipo_incidente") == null
-                        || dados.get("data_inicio") == null
-                        || dados.get("data_fim") == null
-                        || dados.get("numero_feridos") == null
-                        || dados.get("danos_materiais") == null
-                        || dados.get("impacto_missao") == null
-                        || dados.get("status_resolucao") == null
-                        || dados.get("medidas_adotadas") == null) {
-
-                    throw new IllegalArgumentException(
-                            "Preencha todos os campos do incidente operacional."
-                    );
-                }
-
-                Integer fatalidades = ((Number) dados.get("numero_fatalidades")).intValue();
-
-                Integer feridos = ((Number) dados.get("numero_feridos")).intValue();
-
-                Float intensidade = ((Number) dados.get("intensidade")).floatValue();
-
-                if (fatalidades < 0 || feridos < 0) {
-                    throw new IllegalArgumentException(
-                            "O número de fatalidades e feridos não pode ser negativo.");
-                }
-
-                LocalDateTime inicio = (LocalDateTime) dados.get("data_inicio");
-
-                LocalDateTime fim = (LocalDateTime) dados.get("data_fim");
-
-                if (fim.isBefore(inicio)) {
-                    throw new IllegalArgumentException(
-                            "A data final não pode ser anterior à data inicial.");
-                }
-
-                TipoIncidente.valueOf(dados.get("tipo_incidente").toString());
-
-                ImpactoMissao.valueOf(dados.get("impacto_missao").toString());
-
-                StatusResolucao.valueOf(dados.get("status_resolucao").toString());
-            }
-        }
 
         return repository.save(ocorrencia);
     }
+
+
 }

@@ -1,14 +1,14 @@
 package br.edu.infnet.continuum.controller;
 
 import br.edu.infnet.continuum.domain.model.Ocorrencia;
-import br.edu.infnet.continuum.dtos.OcorrenciaCreateDTO;
+import br.edu.infnet.continuum.dtos.ocorrencias.OcorrenciaCreateDTO;
 import br.edu.infnet.continuum.service.OcorrenciaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/ocorrencia")
@@ -20,11 +20,27 @@ public class OcorrenciaController {
     }
 
     @PostMapping
-    public ResponseEntity<Ocorrencia> create(@RequestBody OcorrenciaCreateDTO dto) {
-        Ocorrencia criada = service.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(criada);
+    public ResponseEntity<Ocorrencia> create(@Valid @RequestBody OcorrenciaCreateDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
+    @GetMapping
+    public List<Ocorrencia> getAll(){
+        return service.getAll();
+    }
 
+    @GetMapping("/{id}")
+    public Ocorrencia getById(@PathVariable String id) {
+        return service.getById(id);
+    }
 
+    @GetMapping("missao/{id}")
+    public List<Ocorrencia> getByMissao(@PathVariable Long id) {
+        return service.getByMissao(id);
+    }
+
+    @GetMapping("autor/{id}")
+    public List<Ocorrencia> getByAutor(@PathVariable Long id) {
+        return service.getByAutor(id);
+    }
 }

@@ -45,12 +45,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(autenticacao);
 
-
         }
-
         filterChain.doFilter(request, response);
-
-
     }
 
     private String recorverToken(HttpServletRequest request) {
@@ -58,7 +54,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (authHeader == null){
             return null;
         }else{
-            return authHeader.replace("Bearer "," ");
+            return authHeader.replace("Bearer ","");
         }
     }
 }

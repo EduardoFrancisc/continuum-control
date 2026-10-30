@@ -37,8 +37,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         //Agente
-                        .requestMatchers(HttpMethod.POST, "/agente").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//create
-                        .requestMatchers(HttpMethod.DELETE, "/agente/{id}").hasAnyRole("ADMINISTRADOR", "OPERADOR")//getById
+                        .requestMatchers(HttpMethod.POST, "/agente").hasAnyRole("ADMINISTRADOR")//create
+                        .requestMatchers(HttpMethod.DELETE, "/agente/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getById
                         .requestMatchers(HttpMethod.PUT, "/agente/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//update
                         .requestMatchers(HttpMethod.GET,  "/agente").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
                         .requestMatchers(HttpMethod.GET,  "/agente/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getById
@@ -49,6 +49,7 @@ public class SecurityConfig {
                         //EventoHistórico
                         .requestMatchers(HttpMethod.GET,  "/evento").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR","AGENTE")//getAll
                         .requestMatchers(HttpMethod.GET,  "/evento/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getById
+
 
                         .requestMatchers(HttpMethod.GET, "/anomalia").permitAll()
                         .requestMatchers(HttpMethod.GET, "/estabilidade").permitAll()

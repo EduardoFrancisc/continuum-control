@@ -431,7 +431,6 @@ INSERT INTO anomalias (
 -- ============================================================================
 -- Missões (missoes)
 -- ============================================================================
--- Insert na tabela principal de missões
 INSERT INTO missoes (anomalia_id, objetivo, destino_temporal, prioridade, estado, data_inicio, data_fim, is_deleted)
 VALUES (1, 'Investigar anacronismo', 'Roma Antiga, 476 d.C.', 'ALTA', 'PLANEJADA', '2026-10-15', NULL, false);
 
@@ -551,3 +550,20 @@ INSERT INTO missoes_agentes (missao_id, agentes_id)
 VALUES (16, 2),
        (16, 19),
        (16, 21);
+
+-- ============================================================================
+-- Usuários
+-- ============================================================================
+---    OPERADOR, AGENTE, SUPERVISOR, ADMINISTRADOR
+INSERT INTO usuarios(id, login, role, senha)
+VALUES (1, 'agente00', 'ADMINISTRADOR', '$2a$10$jx7xKkcqC8ZuOHbhL1FOo.jC4DbMSBgUbobmdmJucWC.DQ5T31.3i');
+
+INSERT INTO usuarios(id, login, role, senha)
+VALUES (2, 'agente01', 'SUPERVISOR', '$2a$10$2bwlu7Ca9WvYaZL1GSwODeOl0G9d5itP9v/IeaYAp9PoPWl3zHIp2');
+
+INSERT INTO usuarios(id, login, role, senha)
+VALUES (4, 'agente02', 'OPERADOR', '$2a$10$qqkOoYNSDhWWkhiPO0/.1u7w3SS4pjtkDCoYEEttjyTQzhWk8XERW');
+
+INSERT INTO usuarios(id, login, role, senha)
+VALUES (3, 'agente03', 'AGENTE', '$2a$10$S2GrtNEe4.Cx0sAGP6qKPumS83KvC8H9CzglT39NmXvPyNHWNAARa');
+

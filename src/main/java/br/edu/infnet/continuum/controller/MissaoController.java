@@ -2,12 +2,17 @@ package br.edu.infnet.continuum.controller;
 
 import br.edu.infnet.continuum.domain.enums.EstadoMissao;
 import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
+import br.edu.infnet.continuum.domain.model.Anomalia;
+import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.domain.model.Missao;
+import br.edu.infnet.continuum.dtos.AnomaliaMudancaRiscoDTO;
+import br.edu.infnet.continuum.dtos.AtribuirMissaoDTO;
+import br.edu.infnet.continuum.dtos.MudarEstadoMissaoDTO;
 import br.edu.infnet.continuum.service.MissaoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,5 +54,22 @@ public class MissaoController {
     public List<Missao> getByAgent(@PathVariable Long id){
         return service.getByAgent(id);
     }
+
+    @PostMapping
+    public ResponseEntity<Missao> create(@Valid @RequestBody Missao missao) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(missao));
+    }
+
+    @PutMapping("/atribuir")
+    public ResponseEntity<Missao> assignMission(@Valid @RequestBody AtribuirMissaoDTO dto){
+        return ResponseEntity.status(HttpStatus.OK).body(service.assignMission(dto));
+    }
+
+    @PutMapping("/estado/alterar")
+    public ResponseEntity<Missao> alterState(@Valid @RequestBody MudarEstadoMissaoDTO dto){
+        return ResponseEntity.status(HttpStatus.OK).body(service.alterState(dto));
+    }
+
+
 
 }

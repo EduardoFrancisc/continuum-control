@@ -11,6 +11,7 @@ import br.edu.infnet.continuum.repository.AnomaliaRepository;
 import br.edu.infnet.continuum.repository.EMRepository;
 import br.edu.infnet.continuum.repository.MissaoRepository;
 import br.edu.infnet.continuum.repository.OcorrenciaRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -118,5 +119,16 @@ public class AnomaliaService {
                 missoes
         );
         return dto;
+    }
+
+
+    public Anomalia create(@Valid Anomalia anomalia) {
+        return anomaliaRepository.save(anomalia);
+    }
+
+    public Anomalia changeRisc(@Valid AnomaliaMudancaRiscoDTO dto) {
+        Anomalia a = getById(dto.id());
+        a.setRisco(dto.riscoAnomalia());
+        return anomaliaRepository.save(a);
     }
 }

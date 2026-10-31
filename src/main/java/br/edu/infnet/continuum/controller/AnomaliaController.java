@@ -3,12 +3,14 @@ package br.edu.infnet.continuum.controller;
 import br.edu.infnet.continuum.domain.enums.EstadoAnomalia;
 import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
 import br.edu.infnet.continuum.domain.model.Anomalia;
+import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.dtos.AnomaliaHistoricoDTO;
+import br.edu.infnet.continuum.dtos.AnomaliaMudancaRiscoDTO;
 import br.edu.infnet.continuum.service.AnomaliaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -56,7 +58,15 @@ public class AnomaliaController {
         return service.getAnomalyByHistory(id);
     }
 
+    @PostMapping
+    public ResponseEntity<Anomalia> create(@Valid @RequestBody Anomalia anomalia) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(anomalia));
+    }
 
+    @PutMapping("/classificar/risco")
+    public ResponseEntity<Anomalia> changeRisc(@Valid @RequestBody AnomaliaMudancaRiscoDTO dto){
+        return ResponseEntity.status(HttpStatus.OK).body(service.changeRisc(dto));
+    }
 
 
 

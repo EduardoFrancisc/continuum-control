@@ -1,8 +1,11 @@
 package br.edu.infnet.continuum.controller;
 
 import br.edu.infnet.continuum.domain.enums.ImportanciaEH;
+import br.edu.infnet.continuum.domain.model.Agente;
 import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.service.EHService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,5 +49,12 @@ public class EHController { //EventoHistórico
         return ResponseEntity.ok(service.delete(id));
     }
 
-    //Falta criar o create e o put, mas faz sentido? avaliar depois
+    @PostMapping
+    public ResponseEntity<EventoHistorico> create(@Valid @RequestBody EventoHistorico eventoHistorico) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(eventoHistorico));
+    }
+
+    //Falta criar o create e o put, mas faz sentido? avaliar depois -> sim
+
+
 }

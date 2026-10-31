@@ -5,6 +5,7 @@ import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.exception.EntidadeDeletada;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.EHRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -43,5 +44,9 @@ public class EHService {
 
     public List<EventoHistorico> getByPeriod(LocalDate inicio, LocalDate fim) {
         return repository.getEventoHistoricoByDataInicioBetween(inicio, fim);
+    }
+
+    public EventoHistorico create(@Valid EventoHistorico eventoHistorico) {
+        return repository.save(eventoHistorico);
     }
 }

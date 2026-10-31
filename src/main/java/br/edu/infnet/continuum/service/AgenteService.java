@@ -42,7 +42,7 @@ public class AgenteService {
         return repository.getAgentesByEspecialidadeAndIsDeletedFalse(especialidade);
     }
 
-    public Agente create(@Valid Agente agente) {
+    public Agente create(Agente agente) {
         return repository.save(agente);
     }
 
@@ -55,7 +55,7 @@ public class AgenteService {
         return repository.save(a);
     }
 
-    public Agente update(@Valid Agente n, Long id) {
+    public Agente update(Agente n, Long id) {
         Agente a = getById(id);
 
         if (a.getIsDeleted()){throw new EntidadeDeletada("Agente "+id+" já está deletado(a).");}

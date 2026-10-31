@@ -49,9 +49,20 @@ public class SecurityConfig {
                         //EventoHistórico
                         .requestMatchers(HttpMethod.GET,  "/evento").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR","AGENTE")//getAll
                         .requestMatchers(HttpMethod.GET,  "/evento/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getById
+                        .requestMatchers(HttpMethod.POST,  "/evento").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//create
+
+                        //Anomalia
+                        .requestMatchers(HttpMethod.GET, "/anomalia").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
+                        .requestMatchers(HttpMethod.POST, "/anomalia").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//create
+                        .requestMatchers(HttpMethod.POST, "/anomalia/classificar/risco").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//changeRisc
+
+                        //Missão
+                        .requestMatchers(HttpMethod.GET, "/missao").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
+                        .requestMatchers(HttpMethod.POST, "/missao").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//creat
+                        .requestMatchers(HttpMethod.POST, "/missao/atribuir").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//atribuirAMissões
+                        .requestMatchers(HttpMethod.POST, "/missao/estado/alterar").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//mudarEstadoMissão
 
 
-                        .requestMatchers(HttpMethod.GET, "/anomalia").permitAll()
                         .requestMatchers(HttpMethod.GET, "/estabilidade").permitAll()
                         .requestMatchers(HttpMethod.POST, "/ocorrencia").permitAll()
                         .requestMatchers(HttpMethod.GET, "/ocorrencia").permitAll()

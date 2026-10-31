@@ -240,7 +240,7 @@ INSERT INTO anomalias (
           'Inconsistência temporal',
           'A data do evento diverge dos registros históricos conhecidos.',
           '2025-01-15',
-          'ALTO',
+          'CRÍTICO',
           'DETECTADA',
           'Arquivo histórico',
           'Necessário revisar os documentos originais para confirmar a data correta.',
@@ -566,4 +566,10 @@ VALUES (4, 'agente02', 'OPERADOR', '$2a$10$qqkOoYNSDhWWkhiPO0/.1u7w3SS4pjtkDCoYE
 
 INSERT INTO usuarios(id, login, role, senha)
 VALUES (3, 'agente03', 'AGENTE', '$2a$10$S2GrtNEe4.Cx0sAGP6qKPumS83KvC8H9CzglT39NmXvPyNHWNAARa');
+
+-- ============================================================================
+-- Autorização de missões
+-- ============================================================================
+INSERT INTO autorizacoes_operacao (missao_id, responsavel_id, instante, observacao)
+VALUES (1, 2, CURRENT_TIMESTAMP, 'Autorização concedida para início da missão.');
 

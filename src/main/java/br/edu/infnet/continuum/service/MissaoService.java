@@ -84,13 +84,11 @@ public class MissaoService {
         if (ids.size() != missao.getAgentes().size()) {
             throw new IllegalArgumentException("Existem IDs de agentes repetidos.");
         }
-
         return missaoRepository.save(missao);
     }
 
     public Missao assignMission(AtribuirMissaoDTO dto) {
         Missao m = getById(dto.id());
-
         Set<Agente> novosAgentes = new HashSet<>();
         Set<Long> ids = new HashSet<>(dto.idsAgentes()); //Tira os duplicados
 
@@ -125,34 +123,50 @@ public class MissaoService {
         //PLANEJADA, AUTORIZADA, EM_EXECUÇÃO, CONCLUÍDA, CANCELADA, FALHOU
         switch (dto.estado()){
             case AUTORIZADA -> {
+                if (m.getEstado() != EstadoMissao.PLANEJADA){
+                    throw new IllegalArgumentException("Apenas uma missão planejada pode ser 'AUTORIZADA'.");
+                }
                 if (m.getPrioridade() == PrioridadeMissao.EMERGÊNCIA && aoService.getByMission(dto.id()) == null) {
-                    throw new EntidadeNaoLocalizada("Missão " + dto.id() + " não possui uma autorização de operação.");
+                    throw new EntidadeNaoLocalizada("A prioridade da Missão " + dto.id() + " foi classificada como 'EMERGÊNCIA' e não possui uma autorização de operação.");
                 }
 
                 Anomalia anomalia = anomaliaService.getById(m.getAnomalia().getId());
-
                 if (anomalia.getRisco() == RiscoAnomalia.CRÍTICO && aoService.getByMission(dto.id()) == null){
                     throw new EntidadeNaoLocalizada("A anomalia da Missão " + dto.id() + " foi classificada como 'CRÍTICO' e não possui uma autorização de operação.");
                 }
-
                 m.setEstado(EstadoMissao.AUTORIZADA);
             }
-//            case EM_EXECUÇÃO -> {
-//
-//            }
-//            case CONCLUÍDA -> {
-//
-//            }
-//            case CANCELADA -> {
-//
-//            }
-//            case FALHOU -> {
-//
-//            }
-//            default -> {
-//
-//            }
+            case EM_EXECUÇÃO -> {
+                if (m.getEstado() != EstadoMissao.AUTORIZADA){
+                    throw new IllegalArgumentException("A missão "+dto.id()+" não pode mudar entrar 'EM_EXECUÇÃO' porque ainda não foi 'AUTORIZADA'.");
+                }
+                m.setEstado(dto.estado());
+            }
+
+            case CONCLUÍDA -> {
+                if (m.getEstado() != EstadoMissao.EM_EXECUÇÃO){
+                    throw new IllegalArgumentException("A missão "+dto.id()+" não está 'EM_EXECUÇÃO' para ser 'CONCLUÍDA'.");
+                }
+                m.setEstado(dto.estado());
+            }
+            case CANCELADA -> {
+                if (m.getEstado() != EstadoMissao.CONCLUÍDA){
+                    throw new IllegalArgumentException("A missão "+dto.id()+" já foi 'CONCLUÍDA', não pode ser 'CANCELADA'.");
+                }
+                m.setEstado(dto.estado());
+            }
+            case FALHOU -> {
+                if (m.getEstado() != EstadoMissao.CONCLUÍDA){
+                    throw new IllegalArgumentException("A missão "+dto.id()+" já foi 'CONCLUÍDA', não é possível designar 'FALHOU'.");
+                }
+                m.setEstado(dto.estado());
+            }
         }
         return missaoRepository.save(m);
     }
+
+
+
+
+
 }

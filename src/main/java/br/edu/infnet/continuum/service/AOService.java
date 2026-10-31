@@ -4,6 +4,7 @@ import br.edu.infnet.continuum.domain.model.AutorizacaoOperacao;
 import br.edu.infnet.continuum.domain.model.Missao;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.AORepository;
+import br.edu.infnet.continuum.repository.MissaoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +12,11 @@ import java.util.List;
 @Service
 public class AOService {
     private final AORepository repository;
-    private final MissaoService missaoService;
+    private final MissaoRepository missaoRepository;
 
-    public AOService(AORepository repository, MissaoService missaoService){
+    public AOService(AORepository repository, MissaoRepository missaoRepository){
         this.repository = repository;
-        this.missaoService = missaoService;
+        this.missaoRepository = missaoRepository;
     }
 
     public List<AutorizacaoOperacao> getAll(){
@@ -28,8 +29,15 @@ public class AOService {
         );
     }
 
+    //Usar o service de missões aqui estava acusando dependência circular
+    public Missao getMissionById(Long id) {
+        return missaoRepository.findById(id).orElseThrow(
+                () -> new EntidadeNaoLocalizada("Missão " + id + " não encontrado(a).")
+        );
+    }
+
     public AutorizacaoOperacao getByMission(Long id){
-        Missao m = missaoService.getById(id);
+        Missao m = getMissionById(id);
         return repository.getAutorizacaoOperacaoByMissao_Id(m.getId());
     }
 

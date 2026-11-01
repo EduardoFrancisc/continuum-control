@@ -3,7 +3,6 @@ package br.edu.infnet.continuum.controller;
 import br.edu.infnet.continuum.domain.enums.EstadoAnomalia;
 import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
 import br.edu.infnet.continuum.domain.model.Anomalia;
-import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.dtos.AnomaliaHistoricoDTO;
 import br.edu.infnet.continuum.dtos.AnomaliaMudancaRiscoDTO;
 import br.edu.infnet.continuum.service.AnomaliaService;

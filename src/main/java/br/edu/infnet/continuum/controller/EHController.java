@@ -1,7 +1,6 @@
 package br.edu.infnet.continuum.controller;
 
 import br.edu.infnet.continuum.domain.enums.ImportanciaEH;
-import br.edu.infnet.continuum.domain.model.Agente;
 import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.service.EHService;
 import jakarta.validation.Valid;

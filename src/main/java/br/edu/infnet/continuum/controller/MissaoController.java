@@ -1,11 +1,7 @@
 package br.edu.infnet.continuum.controller;
 
 import br.edu.infnet.continuum.domain.enums.EstadoMissao;
-import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
-import br.edu.infnet.continuum.domain.model.Anomalia;
-import br.edu.infnet.continuum.domain.model.EventoHistorico;
 import br.edu.infnet.continuum.domain.model.Missao;
-import br.edu.infnet.continuum.dtos.AnomaliaMudancaRiscoDTO;
 import br.edu.infnet.continuum.dtos.AtribuirMissaoDTO;
 import br.edu.infnet.continuum.dtos.MudarEstadoMissaoDTO;
 import br.edu.infnet.continuum.service.MissaoService;

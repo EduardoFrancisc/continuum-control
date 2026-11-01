@@ -2,10 +2,10 @@ package br.edu.infnet.continuum.controller;
 
 import br.edu.infnet.continuum.domain.model.EncerramentoMissoes;
 import br.edu.infnet.continuum.service.EMService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +28,11 @@ public class EMController {//EncerramentoMissão
     public EncerramentoMissoes getById(@PathVariable Long id) {
         return service.getById(id);
     }
+
+    @PostMapping
+    public ResponseEntity<EncerramentoMissoes> create(@Valid @RequestBody EncerramentoMissoes encerramentoMissoes) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(encerramentoMissoes));
+    }
+
+
 }

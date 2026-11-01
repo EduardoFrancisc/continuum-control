@@ -2,7 +2,6 @@ package br.edu.infnet.continuum.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDateTime;
 
 @Data

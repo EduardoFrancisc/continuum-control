@@ -36,6 +36,7 @@ public class SecurityConfig {
                         //Auth
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+
                         //Agente
                         .requestMatchers(HttpMethod.POST, "/agente").hasAnyRole("ADMINISTRADOR")//create
                         .requestMatchers(HttpMethod.DELETE, "/agente/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getById
@@ -52,23 +53,40 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,  "/evento").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//create
 
                         //Anomalia
-                        .requestMatchers(HttpMethod.GET, "/anomalia").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
                         .requestMatchers(HttpMethod.POST, "/anomalia").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//create
+                        .requestMatchers(HttpMethod.GET, "/anomalia").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
+                        .requestMatchers(HttpMethod.GET,  "/anomalia/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getById
                         .requestMatchers(HttpMethod.POST, "/anomalia/classificar/risco").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//changeRisc
+                        .requestMatchers(HttpMethod.GET,  "/anomalia/ativas").hasAnyRole("ADMINISTRADOR", "SUPERVISOR", "OPERADOR")//getAtivas
+                        .requestMatchers(HttpMethod.GET,  "/anomalia/criticas").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getCriticas
+                        .requestMatchers(HttpMethod.GET,  "/anomalia/estado/{estado}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getByEstado
+                        .requestMatchers(HttpMethod.GET,  "/anomalia/risco/{risco}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getByRisco
+                        .requestMatchers(HttpMethod.GET,  "/anomalia/historico/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getHistorico
 
                         //Missão
                         .requestMatchers(HttpMethod.GET, "/missao").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
                         .requestMatchers(HttpMethod.POST, "/missao").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//creat
                         .requestMatchers(HttpMethod.POST, "/missao/atribuir").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//atribuirAMissões
                         .requestMatchers(HttpMethod.POST, "/missao/estado/alterar").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//mudarEstadoMissão
+                        .requestMatchers(HttpMethod.GET, "/missao/acontecendo").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
 
+                        //Intervenções
+                        .requestMatchers(HttpMethod.POST, "/intervencao").hasAnyRole("AGENTE")//create
+                        .requestMatchers(HttpMethod.GET,  "/intervencao").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getAll
+                        .requestMatchers(HttpMethod.GET,  "/intervencao/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getById
 
+                        //Ocorrencias
+                        .requestMatchers(HttpMethod.POST, "/ocorrencia").hasAnyRole("AGENTE")//create
+                        .requestMatchers(HttpMethod.GET,  "/ocorrencia").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getAll
+                        .requestMatchers(HttpMethod.GET,  "/ocorrencia/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getById
+                        .requestMatchers(HttpMethod.GET,  "/ocorrencia/missao/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getByMission
+                        .requestMatchers(HttpMethod.GET,  "/ocorrencia/autor/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getByAutor
+
+                        //EstabilidadeTemporal
                         .requestMatchers(HttpMethod.GET, "/estabilidade").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/ocorrencia").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/ocorrencia").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/ocorrencia/missao/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/ocorrencia/autor/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/ocorrencia/{id}").permitAll()
+
+                        //EncerramentoMissoes
+
 
 
                         .anyRequest().authenticated()

@@ -1,8 +1,6 @@
 package br.edu.infnet.continuum.service;
 
-import br.edu.infnet.continuum.domain.enums.EstadoMissao;
-import br.edu.infnet.continuum.domain.enums.PrioridadeMissao;
-import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
+import br.edu.infnet.continuum.domain.enums.*;
 import br.edu.infnet.continuum.domain.model.Agente;
 import br.edu.infnet.continuum.domain.model.Anomalia;
 import br.edu.infnet.continuum.domain.model.Missao;
@@ -12,6 +10,7 @@ import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.MissaoRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -79,14 +78,22 @@ public class MissaoService {
 
     public Missao create(Missao missao) {
 
+        Anomalia a = anomaliaService.getById(missao.getAnomalia().getId());
+
         Set<Agente> ids = new HashSet<>(missao.getAgentes());
 
         if (ids.size() != missao.getAgentes().size()) {
             throw new IllegalArgumentException("Existem IDs de agentes repetidos.");
         }
+
+        if (a.getEstado() == EstadoAnomalia.IRREVERSÍVEL){
+            throw new IllegalArgumentException("Esta anomalia é 'IRREVERSÍVEL', não adianta criar missões para ela.");
+        }
+
         return missaoRepository.save(missao);
     }
 
+    @Transactional
     public Missao assignMission(AtribuirMissaoDTO dto) {
         Missao m = getById(dto.id());
         Set<Agente> novosAgentes = new HashSet<>();
@@ -101,7 +108,14 @@ public class MissaoService {
         for (Long id : dto.idsAgentes()) {
             Agente agente = agenteService.getById(id);
 
-            //Verifica se algum agente ja está na missão
+            if (agente.getSituacao() != SituacaoAgente.DISPONÍVEL){
+                throw new IllegalArgumentException("O agente " + agente.getId() + " não está 'DISPONÍVEL' ele(a) está " + agente.getSituacao().name());
+            }
+
+            agente.setSituacao(SituacaoAgente.EM_MISSÃO);
+            agenteService.update(agente, agente.getId());
+
+            //Verifica se algum agente ja está na missão <- Não faz sentido, devo apenas verificar se o agente está disponível.
             if (m.getAgentes().stream().map(agenteAtual -> agenteAtual.getId()).toList().contains(id)){
                 throw new IllegalArgumentException("O agente " + id + " já está na missão.");
             }
@@ -117,6 +131,7 @@ public class MissaoService {
         return missaoRepository.save(m);
     }
 
+    @Transactional
     public Missao alterState(@Valid MudarEstadoMissaoDTO dto) {
         Missao m = getById(dto.id());
 
@@ -148,18 +163,33 @@ public class MissaoService {
                     throw new IllegalArgumentException("A missão "+dto.id()+" não está 'EM_EXECUÇÃO' para ser 'CONCLUÍDA'.");
                 }
                 m.setEstado(dto.estado());
+
+                m.getAgentes().forEach(a -> {
+                    a.setSituacao(SituacaoAgente.DISPONÍVEL);
+                    agenteService.update(a, a.getId());
+                });
             }
             case CANCELADA -> {
-                if (m.getEstado() != EstadoMissao.CONCLUÍDA){
+                if (m.getEstado() == EstadoMissao.CONCLUÍDA){
                     throw new IllegalArgumentException("A missão "+dto.id()+" já foi 'CONCLUÍDA', não pode ser 'CANCELADA'.");
                 }
                 m.setEstado(dto.estado());
+
+                m.getAgentes().forEach(a -> {
+                    a.setSituacao(SituacaoAgente.DISPONÍVEL);
+                    agenteService.update(a, a.getId());
+                });
             }
             case FALHOU -> {
-                if (m.getEstado() != EstadoMissao.CONCLUÍDA){
+                if (m.getEstado() == EstadoMissao.CONCLUÍDA){
                     throw new IllegalArgumentException("A missão "+dto.id()+" já foi 'CONCLUÍDA', não é possível designar 'FALHOU'.");
                 }
                 m.setEstado(dto.estado());
+
+                m.getAgentes().forEach(a -> {
+                    a.setSituacao(SituacaoAgente.DISPONÍVEL);
+                    agenteService.update(a, a.getId());
+                });
             }
         }
         return missaoRepository.save(m);

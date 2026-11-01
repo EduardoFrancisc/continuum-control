@@ -3,7 +3,6 @@ package br.edu.infnet.continuum.service;
 import br.edu.infnet.continuum.domain.enums.EstadoAnomalia;
 import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
 import br.edu.infnet.continuum.domain.model.Anomalia;
-import br.edu.infnet.continuum.domain.model.EncerramentoMissoes;
 import br.edu.infnet.continuum.domain.model.Ocorrencia;
 import br.edu.infnet.continuum.dtos.*;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +27,8 @@ public class AnomaliaService {
 
     public AnomaliaService(AnomaliaRepository repository,
                            OcorrenciaRepository ocorrenciaRepository,
-                           MissaoRepository missaoRepository, EMService emService, EMRepository eMRepository){
+                           MissaoRepository missaoRepository,
+                           EMRepository eMRepository){
         this.anomaliaRepository = repository;
         this.ocorrenciaRepository = ocorrenciaRepository;
         this.missaoRepository = missaoRepository;
@@ -65,32 +64,32 @@ public class AnomaliaService {
     public AnomaliaHistoricoDTO getAnomalyByHistory(Long id) {
         Anomalia anomalia = getById(id);
 
-        Optional<EncerramentoMissoes> em = eMRepository.findById(id);
-
-        EncerramentoResumo encerramentoResumo = em.map(e -> new EncerramentoResumo(
-                        e.getId(),
-                        e.getResultado(),
-                        e.getImpacto(),
-                        e.getSituacaoAnomalia(),
-                        e.getResumo()
-        )).orElse(null);
-
         List<Long> ids_missoes = new ArrayList<>();
 
         List<MissoesAnomaliaHistorico> missoes = missaoRepository.getByAnomalia_Id(id).stream().map(
                 m -> {
                     ids_missoes.add(m.getId());
+
+                    EncerramentoResumo encerramentoResumo = eMRepository.findByMissao_Id(m.getId())
+                            .map(e -> new EncerramentoResumo(
+                                    e.getId(),
+                                    e.getResultado(),
+                                    e.getImpacto(),
+                                    e.getSituacaoAnomalia(),
+                                    e.getResumo()
+                            )).orElse(null);
+
                     return new MissoesAnomaliaHistorico(
-                        m.getId(),
-                        m.getEstado(),
-                        m.getDataInicio(),
-                        m.getDataFim(),
-                        m.getAgentes().stream()
-                                .map(a -> new AgenteResumo(
-                                        a.getId(),
-                                        a.getNome(),
-                                        a.getEspecialidade()
-                                )).collect(Collectors.toSet()),
+                            m.getId(),
+                            m.getEstado(),
+                            m.getDataInicio(),
+                            m.getDataFim(),
+                            m.getAgentes().stream()
+                                    .map(a -> new AgenteResumo(
+                                            a.getId(),
+                                            a.getNome(),
+                                            a.getEspecialidade()
+                                    )).collect(Collectors.toSet()),
                             encerramentoResumo
                     );
                 }
@@ -105,12 +104,12 @@ public class AnomaliaService {
         List<OcorrenciasAnomaliaHistoricoDTO> ocorrenciasDto = ocorrencias
                 .stream()
                 .map(oc -> new OcorrenciasAnomaliaHistoricoDTO(
-                oc.getId(),
-                oc.getTipo(),
-                oc.getDataRegistro())
-        ).toList();
+                        oc.getId(),
+                        oc.getTipo(),
+                        oc.getDataRegistro())
+                ).toList();
 
-        AnomaliaHistoricoDTO dto = new AnomaliaHistoricoDTO(
+        return new AnomaliaHistoricoDTO(
                 anomalia.getId(),
                 anomalia.getNome(),
                 anomalia.getDataDeteccao(),
@@ -118,7 +117,6 @@ public class AnomaliaService {
                 ocorrenciasDto,
                 missoes
         );
-        return dto;
     }
 
 
@@ -131,4 +129,11 @@ public class AnomaliaService {
         a.setRisco(dto.riscoAnomalia());
         return anomaliaRepository.save(a);
     }
+
+    public Anomalia changeEstate(@Valid AnomaliaMudancaEstadoDTO dto) {
+        Anomalia a = getById(dto.id());
+        a.setEstado(dto.estadoAnomalia());
+        return anomaliaRepository.save(a);
+    }
+
 }

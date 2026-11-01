@@ -66,8 +66,8 @@ public class SecurityConfig {
                         //Missão
                         .requestMatchers(HttpMethod.GET, "/missao").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
                         .requestMatchers(HttpMethod.POST, "/missao").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//creat
-                        .requestMatchers(HttpMethod.POST, "/missao/atribuir").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//atribuirAMissões
-                        .requestMatchers(HttpMethod.POST, "/missao/estado/alterar").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//mudarEstadoMissão
+                        .requestMatchers(HttpMethod.PUT, "/missao/atribuir").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//atribuirAMissões
+                        .requestMatchers(HttpMethod.PUT, "/missao/estado/alterar").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//mudarEstadoMissão
                         .requestMatchers(HttpMethod.GET, "/missao/acontecendo").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getAll
 
                         //Intervenções
@@ -84,6 +84,12 @@ public class SecurityConfig {
 
                         //EstabilidadeTemporal
                         .requestMatchers(HttpMethod.GET, "/estabilidade").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/estabilidade/estado").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")
+
+                        //AutorizaçãoOperação
+                        .requestMatchers(HttpMethod.GET,  "/autorizar-operacoes").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getAll
+                        .requestMatchers(HttpMethod.GET,  "/autorizar-operacoes/{id}").hasAnyRole("ADMINISTRADOR", "SUPERVISOR","OPERADOR")//getById
+                        .requestMatchers(HttpMethod.POST,  "/autorizar-operacoes").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")//getAll
 
                         //EncerramentoMissoes
 

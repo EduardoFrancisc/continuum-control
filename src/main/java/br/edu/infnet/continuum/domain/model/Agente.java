@@ -25,5 +25,5 @@ public class Agente {
     private SituacaoAgente situacao = SituacaoAgente.DISPONÍVEL;
 
     @Column(nullable = false)
-    private Boolean IsDeleted = false;
+    private Boolean isDeleted = false;
 }

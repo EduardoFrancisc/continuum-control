@@ -5,6 +5,7 @@ import br.edu.infnet.continuum.domain.model.Missao;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.AORepository;
 import br.edu.infnet.continuum.repository.MissaoRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,4 +42,7 @@ public class AOService {
         return repository.getAutorizacaoOperacaoByMissao_Id(m.getId());
     }
 
+    public AutorizacaoOperacao create(@Valid AutorizacaoOperacao autorizacaoOperacao) {
+        return repository.save(autorizacaoOperacao);
+    }
 }

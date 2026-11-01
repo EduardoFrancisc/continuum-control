@@ -6,7 +6,6 @@ import br.edu.infnet.continuum.domain.model.Agente;
 import br.edu.infnet.continuum.exception.EntidadeDeletada;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.AgenteRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,7 +57,9 @@ public class AgenteService {
     public Agente update(Agente n, Long id) {
         Agente a = getById(id);
 
-        if (a.getIsDeleted()){throw new EntidadeDeletada("Agente "+id+" já está deletado(a).");}
+        if (a.getIsDeleted()){
+            throw new EntidadeDeletada("Agente "+id+" já está deletado(a).");
+        }
 
         a.setNome(n.getNome());
         a.setEspecialidade(n.getEspecialidade());

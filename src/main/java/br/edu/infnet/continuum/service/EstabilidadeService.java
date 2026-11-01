@@ -3,6 +3,9 @@ package br.edu.infnet.continuum.service;
 import br.edu.infnet.continuum.domain.enums.EstadoMissao;
 import br.edu.infnet.continuum.domain.enums.ImpactoObservado;
 import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
+import br.edu.infnet.continuum.domain.enums.SituacaoAgente;
+import br.edu.infnet.continuum.dtos.EstadoOperacionalDTO;
+import br.edu.infnet.continuum.repository.AgenteRepository;
 import br.edu.infnet.continuum.repository.AnomaliaRepository;
 import br.edu.infnet.continuum.repository.IntervencaoRepository;
 import br.edu.infnet.continuum.repository.MissaoRepository;
@@ -12,14 +15,21 @@ import java.util.Map;
 
 @Service
 public class EstabilidadeService {
-    public final IntervencaoRepository intervencaoRepository;
-    public final AnomaliaRepository anomaliaRepository;
-    public final MissaoRepository missaoRepository;
+    private final IntervencaoRepository intervencaoRepository;
+    private final AnomaliaRepository anomaliaRepository;
+    private final MissaoRepository missaoRepository;
 
-    public EstabilidadeService(IntervencaoRepository intervencaoRepository, AnomaliaRepository anomaliaRepository, MissaoRepository missaoRepository) {
+    private final AgenteRepository agenteRepository;
+
+
+    public EstabilidadeService(IntervencaoRepository intervencaoRepository,
+                               AnomaliaRepository anomaliaRepository,
+                               MissaoRepository missaoRepository,
+                               AgenteRepository agenteRepository) {
         this.intervencaoRepository = intervencaoRepository;
         this.anomaliaRepository = anomaliaRepository;
         this.missaoRepository = missaoRepository;
+        this.agenteRepository = agenteRepository;
     }
 
     public Map<Integer, String> getEstabilidadeTemporal() {
@@ -59,4 +69,21 @@ public class EstabilidadeService {
     }
 
 
+    public EstadoOperacionalDTO getEstadoOperacional() {
+        Integer agentesDisponiveis = agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente.DISPONÍVEL).size();
+        Integer agentesEmMissao = agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente.EM_MISSÃO).size();
+        Integer missaoEmExecucao = missaoRepository.getMissaoByEstado(EstadoMissao.EM_EXECUÇÃO).size();
+        Integer anomaliasAtivas = anomaliaRepository.countAnomaliaByIsActiveTrueAndIsDeletedFalse();
+        Integer anomaliasCriticas = anomaliaRepository.countAnomaliaByRisco(RiscoAnomalia.CRÍTICO);
+        String estadoLinhaTemporal = getEstabilidadeTemporal().values().iterator().next();
+
+        return new EstadoOperacionalDTO(
+                agentesDisponiveis,
+                agentesEmMissao,
+                missaoEmExecucao,
+                anomaliasAtivas,
+                anomaliasCriticas,
+                estadoLinhaTemporal
+        );
+    }
 }

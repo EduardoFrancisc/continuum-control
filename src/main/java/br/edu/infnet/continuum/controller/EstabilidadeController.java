@@ -1,5 +1,6 @@
 package br.edu.infnet.continuum.controller;
 
+import br.edu.infnet.continuum.dtos.EstadoOperacionalDTO;
 import br.edu.infnet.continuum.service.EstabilidadeService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,11 @@ public class EstabilidadeController {
     @GetMapping
     public Map<Integer, String>  getEstabilidadeTemporal(){
         return estabilidadeService.getEstabilidadeTemporal();
+    }
+
+    @GetMapping("/estado")
+    public EstadoOperacionalDTO getEstadoOperacional(){
+        return estabilidadeService.getEstadoOperacional();
     }
 
 }

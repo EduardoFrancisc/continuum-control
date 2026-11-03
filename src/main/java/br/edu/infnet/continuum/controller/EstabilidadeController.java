@@ -18,7 +18,7 @@ public class EstabilidadeController {
     }
 
     @GetMapping
-    public Map<Integer, String>  getEstabilidadeTemporal(){
+    public Map<Float, String>  getEstabilidadeTemporal(){
         return estabilidadeService.getEstabilidadeTemporal();
     }
 

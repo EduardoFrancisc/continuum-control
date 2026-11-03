@@ -1,5 +1,6 @@
 package br.edu.infnet.continuum.service;
 
+import br.edu.infnet.continuum.domain.enums.EstadoAnomalia;
 import br.edu.infnet.continuum.domain.enums.EstadoMissao;
 import br.edu.infnet.continuum.domain.enums.ImpactoObservado;
 import br.edu.infnet.continuum.domain.enums.RiscoAnomalia;
@@ -32,24 +33,38 @@ public class EstabilidadeService {
         this.agenteRepository = agenteRepository;
     }
 
-    public Map<Integer, String> getEstabilidadeTemporal() {
-        Integer indice = 100;
+    public Map<Float, String> getEstabilidadeTemporal() {
+        float indice = 100f;
 
         Integer intervencoesSeveras = intervencaoRepository.countAllByImpactoEstimado(ImpactoObservado.SEVERO);
-        Integer anomaliasCriticas = anomaliaRepository.countAnomaliaByRisco(RiscoAnomalia.CRÍTICO);
+        Integer anomaliasCriticas = anomaliaRepository.countAnomaliaByRiscoAndIsActiveTrueAndIsDeletedFalse(RiscoAnomalia.CRÍTICO);
         Integer missoesFalhas = missaoRepository.countMissaoByEstado(EstadoMissao.FALHOU);
         Integer anomaliasAtivas = anomaliaRepository.countAnomaliaByIsActiveTrueAndIsDeletedFalse();
         Integer missoesEmExecucao = missaoRepository.countMissaoByEstado(EstadoMissao.EM_EXECUÇÃO);
 
-        Integer num_estabilidade = indice - (
-                (intervencoesSeveras * 10) +
-                        (anomaliasCriticas * 7) +
-                        (missoesFalhas * 5) +
-                        (anomaliasAtivas * 2) +
-                        (missoesEmExecucao * 1)
-        );
+        // Coisas boas
+        Integer intervencoesControladas = intervencaoRepository.countAllByImpactoEstimado(ImpactoObservado.CONTROLADO);
+        Integer intervencoesMinimas = intervencaoRepository.countAllByImpactoEstimado(ImpactoObservado.MÍNIMO);
+        Integer anomaliasEstabilizadas = anomaliaRepository
+                .getAnomaliaByEstadoAndIsActiveTrueAndIsDeletedFalse(EstadoAnomalia.ESTABILIZADA)
+                .size();
+        Integer missoesConcluidas = missaoRepository.countMissaoByEstado(EstadoMissao.CONCLUÍDA);
 
-        Integer resultado = Math.max(0, num_estabilidade);
+        float negativos = (intervencoesSeveras * 9.5f)
+                + (anomaliasCriticas * 7.6f)
+                + (missoesFalhas * 5.4f)
+                + (anomaliasAtivas * 2.3f)
+                + (missoesEmExecucao * 1.2f);
+
+        float positivos = (intervencoesControladas * 1.1f)
+                + (intervencoesMinimas * 0.9f)
+                + (anomaliasEstabilizadas * 3.2f)
+                + (missoesConcluidas * 2.1f);
+
+        // Clamp - nunca maior que 100 ou menor que 0
+        float resultado = indice + positivos - negativos;
+        resultado = Math.max(0f, Math.min(100f, resultado));
+        resultado = Math.round(resultado * 10f) / 10f;
 
         String estabilidade_qualitativa;
 
@@ -72,9 +87,9 @@ public class EstabilidadeService {
     public EstadoOperacionalDTO getEstadoOperacional() {
         Integer agentesDisponiveis = agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente.DISPONÍVEL).size();
         Integer agentesEmMissao = agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente.EM_MISSÃO).size();
-        Integer missaoEmExecucao = missaoRepository.getMissaoByEstado(EstadoMissao.EM_EXECUÇÃO).size();
+        Integer missaoEmExecucao = missaoRepository.getMissaoByEstadoAndIsDeletedFalse(EstadoMissao.EM_EXECUÇÃO).size();
         Integer anomaliasAtivas = anomaliaRepository.countAnomaliaByIsActiveTrueAndIsDeletedFalse();
-        Integer anomaliasCriticas = anomaliaRepository.countAnomaliaByRisco(RiscoAnomalia.CRÍTICO);
+        Integer anomaliasCriticas = anomaliaRepository.countAnomaliaByRiscoAndIsActiveTrueAndIsDeletedFalse(RiscoAnomalia.CRÍTICO);
         String estadoLinhaTemporal = getEstabilidadeTemporal().values().iterator().next();
 
         return new EstadoOperacionalDTO(

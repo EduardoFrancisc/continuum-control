@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface MissaoRepository extends JpaRepository<Missao, Long> {
-    List<Missao> getMissaoByEstado(EstadoMissao estado);
+    List<Missao> getMissaoByEstadoAndIsDeletedFalse(EstadoMissao estado);
     List<Missao> getByAnomalia_Id(Long id);
     @Query("SELECT missao " +
             "FROM Missao missao " +

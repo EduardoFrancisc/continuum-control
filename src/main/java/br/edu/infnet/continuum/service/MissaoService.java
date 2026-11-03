@@ -45,11 +45,11 @@ public class MissaoService {
     }
 
     public List<Missao> getByInProgress(){
-        return missaoRepository.getMissaoByEstado(EstadoMissao.EM_EXECUÇÃO);
+        return missaoRepository.getMissaoByEstadoAndIsDeletedFalse(EstadoMissao.EM_EXECUÇÃO);
     }
 
     public List<Missao> getByState(EstadoMissao estado) {
-        return missaoRepository.getMissaoByEstado(estado);
+        return missaoRepository.getMissaoByEstadoAndIsDeletedFalse(estado);
     }
 
     public List<Missao> getByAnomaly(Long id) {

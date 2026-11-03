@@ -14,6 +14,6 @@ public interface AnomaliaRepository extends JpaRepository<Anomalia, Long> {
     List<Anomalia> getAnomaliaByIsActiveTrueAndIsDeletedFalse();
     List<Anomalia> getAnomaliaByRiscoAndIsActiveTrueAndIsDeletedFalse(RiscoAnomalia risco);
     List<Anomalia> getAnomaliaByEstadoAndIsActiveTrueAndIsDeletedFalse(EstadoAnomalia estado);
-    Integer countAnomaliaByRisco(RiscoAnomalia riscoAnomalia);
+    Integer countAnomaliaByRiscoAndIsActiveTrueAndIsDeletedFalse(RiscoAnomalia riscoAnomalia);
     Integer countAnomaliaByIsActiveTrueAndIsDeletedFalse();
 }

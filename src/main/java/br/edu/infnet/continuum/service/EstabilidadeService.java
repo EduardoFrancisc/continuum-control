@@ -50,16 +50,16 @@ public class EstabilidadeService {
                 .size();
         Integer missoesConcluidas = missaoRepository.countMissaoByEstado(EstadoMissao.CONCLUÍDA);
 
-        float negativos = (intervencoesSeveras * 9.5f)
-                + (anomaliasCriticas * 7.6f)
-                + (missoesFalhas * 5.4f)
-                + (anomaliasAtivas * 2.3f)
-                + (missoesEmExecucao * 1.2f);
+        float negativos = (intervencoesSeveras * 3.0f)
+                + (anomaliasCriticas * 2.0f)
+                + (missoesFalhas * 1.5f)
+                + (anomaliasAtivas * 0.6f)
+                + (missoesEmExecucao * 0.1f);
 
-        float positivos = (intervencoesControladas * 1.1f)
-                + (intervencoesMinimas * 0.9f)
-                + (anomaliasEstabilizadas * 3.2f)
-                + (missoesConcluidas * 2.1f);
+        float positivos = (intervencoesControladas * 0.9f)
+                + (intervencoesMinimas * 0.5f)
+                + (anomaliasEstabilizadas * 2.0f)
+                + (missoesConcluidas * 1.6f);
 
         // Clamp - nunca maior que 100 ou menor que 0
         float resultado = indice + positivos - negativos;
@@ -69,12 +69,14 @@ public class EstabilidadeService {
         String estabilidade_qualitativa;
 
         if (resultado >= 80) {
-            estabilidade_qualitativa = "ESTÁVEL";
+            estabilidade_qualitativa = "PLENO";
         } else if (resultado >= 60) {
-            estabilidade_qualitativa = "ATENÇÃO";
+            estabilidade_qualitativa = "ESTÁVEL";
         } else if (resultado >= 40) {
             estabilidade_qualitativa = "INSTÁVEL";
-        } else if (resultado >= 20) {
+        } else if (resultado >= 30) {
+            estabilidade_qualitativa = "ATENÇÃO";
+        } else if (resultado >= 10) {
             estabilidade_qualitativa = "CRÍTICO";
         } else {
             estabilidade_qualitativa = "COLAPSO TEMPORAL";

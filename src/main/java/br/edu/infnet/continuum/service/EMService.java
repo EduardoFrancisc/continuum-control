@@ -63,8 +63,10 @@ public class EMService {
                 ));
             }
 //            case SUCESSO_PARCIAL -> {
-//                //fazer o que aqui?
-//
+//                missaoService.alterState(new MudarEstadoMissaoDTO(
+//                        m.getId(),
+//                        EstadoMissao.CONCLUÍDA
+//                ));
 //            }
         }
 

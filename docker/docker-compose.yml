@@ -1,26 +1,30 @@
+#  docker compose down -v
+#  docker compose up -d
+
 services:
   postgres:
     image: postgres:16
-    container_name: continuum-postgres
+    container_name: postgres-cc
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   mongodb:
     image: mongo:8
-    container_name: continuum-mongo
+    container_name: mongo-cc
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=123456
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: "123456"
     volumes:
       - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   app:
     build: .

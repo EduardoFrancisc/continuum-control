@@ -10,6 +10,7 @@ import br.edu.infnet.continuum.repository.AgenteRepository;
 import br.edu.infnet.continuum.repository.AnomaliaRepository;
 import br.edu.infnet.continuum.repository.IntervencaoRepository;
 import br.edu.infnet.continuum.repository.MissaoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -19,7 +20,6 @@ public class EstabilidadeService {
     private final IntervencaoRepository intervencaoRepository;
     private final AnomaliaRepository anomaliaRepository;
     private final MissaoRepository missaoRepository;
-
     private final AgenteRepository agenteRepository;
 
 
@@ -33,6 +33,7 @@ public class EstabilidadeService {
         this.agenteRepository = agenteRepository;
     }
 
+    @Cacheable(value = "estabilidadeTemporal")
     public Map<Float, String> getEstabilidadeTemporal() {
         float indice = 100f;
 
@@ -85,7 +86,7 @@ public class EstabilidadeService {
         return Map.of(resultado, estabilidade_qualitativa);
     }
 
-
+    @Cacheable(value = "estadoOperacional")
     public EstadoOperacionalDTO getEstadoOperacional() {
         Integer agentesDisponiveis = agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente.DISPONÍVEL).size();
         Integer agentesEmMissao = agenteRepository.getAgentesBySituacaoAndIsDeletedFalse(SituacaoAgente.EM_MISSÃO).size();
@@ -103,4 +104,5 @@ public class EstabilidadeService {
                 estadoLinhaTemporal
         );
     }
+
 }

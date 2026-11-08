@@ -9,6 +9,7 @@ import br.edu.infnet.continuum.dtos.MudarEstadoMissaoDTO;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.MissaoRepository;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,6 +77,8 @@ public class MissaoService {
         }
     }
 
+    //Atualiza o cache quando uma missão é criada
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Missao create(Missao missao) {
 
         Anomalia a = anomaliaService.getById(missao.getAnomalia().getId());
@@ -94,6 +97,7 @@ public class MissaoService {
     }
 
     @Transactional
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Missao assignMission(AtribuirMissaoDTO dto) {
         Missao m = getById(dto.id());
         Set<Agente> novosAgentes = new HashSet<>();
@@ -132,6 +136,7 @@ public class MissaoService {
     }
 
     @Transactional
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Missao alterState(@Valid MudarEstadoMissaoDTO dto) {
         Missao m = getById(dto.id());
 
@@ -194,9 +199,4 @@ public class MissaoService {
         }
         return missaoRepository.save(m);
     }
-
-
-
-
-
 }

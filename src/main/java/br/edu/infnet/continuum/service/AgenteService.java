@@ -6,6 +6,7 @@ import br.edu.infnet.continuum.domain.model.Agente;
 import br.edu.infnet.continuum.exception.EntidadeDeletada;
 import br.edu.infnet.continuum.exception.EntidadeNaoLocalizada;
 import br.edu.infnet.continuum.repository.AgenteRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,10 +42,12 @@ public class AgenteService {
         return repository.getAgentesByEspecialidadeAndIsDeletedFalse(especialidade);
     }
 
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Agente create(Agente agente) {
         return repository.save(agente);
     }
 
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Agente delete(Long id) {
         Agente a = getById(id);
         if (a.getIsDeleted()){
@@ -54,6 +57,7 @@ public class AgenteService {
         return repository.save(a);
     }
 
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Agente update(Agente n, Long id) {
         Agente a = getById(id);
 

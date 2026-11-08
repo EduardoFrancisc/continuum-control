@@ -11,6 +11,7 @@ import br.edu.infnet.continuum.repository.EMRepository;
 import br.edu.infnet.continuum.repository.MissaoRepository;
 import br.edu.infnet.continuum.repository.OcorrenciaRepository;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -119,17 +120,19 @@ public class AnomaliaService {
         );
     }
 
-
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Anomalia create(@Valid Anomalia anomalia) {
         return anomaliaRepository.save(anomalia);
     }
 
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Anomalia changeRisc(@Valid AnomaliaMudancaRiscoDTO dto) {
         Anomalia a = getById(dto.id());
         a.setRisco(dto.riscoAnomalia());
         return anomaliaRepository.save(a);
     }
 
+    @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Anomalia changeEstate(@Valid AnomaliaMudancaEstadoDTO dto) {
         Anomalia a = getById(dto.id());
         a.setEstado(dto.estadoAnomalia());

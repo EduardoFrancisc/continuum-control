@@ -26,5 +26,4 @@ public class EstabilidadeController {
     public EstadoOperacionalDTO getEstadoOperacional(){
         return estabilidadeService.getEstadoOperacional();
     }
-
 }

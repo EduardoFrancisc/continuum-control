@@ -95,8 +95,8 @@ class ContinuumControlApplicationTests {
 
 		try {
 			missaoService.create(novaMissao);
+			fail("Era pra ter lançado IllegalArgumentException");
 		} catch (IllegalArgumentException ex) {
-			// Se a mensagem NÃO contiver o texto esperado, aí sim falha:
 			if (ex.getMessage() == null || !ex.getMessage().contains("IRREVERSÍVEL")) {
 				fail("Lançou a exceção, mas com mensagem incorreta: " + ex.getMessage());
 			}

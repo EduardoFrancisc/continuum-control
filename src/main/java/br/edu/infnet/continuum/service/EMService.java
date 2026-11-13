@@ -56,18 +56,12 @@ public class EMService {
                         EstadoMissao.FALHOU
                 ));
             }
-            case SUCESSO -> {
+            case SUCESSO, SUCESSO_PARCIAL -> {
                 missaoService.alterState(new MudarEstadoMissaoDTO(
                         m.getId(),
                         EstadoMissao.CONCLUÍDA
                 ));
             }
-//            case SUCESSO_PARCIAL -> {
-//                missaoService.alterState(new MudarEstadoMissaoDTO(
-//                        m.getId(),
-//                        EstadoMissao.CONCLUÍDA
-//                ));
-//            }
         }
 
         Anomalia anomalia = m.getAnomalia();

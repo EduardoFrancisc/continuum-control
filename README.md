@@ -142,7 +142,7 @@ O projeto é 100% orquestrado via contêineres, inicializando o PostgreSQL, o Mo
    Copy-Item target\continuum-control-0.0.1-SNAPSHOT.jar docker\app.jar
 
    # Linux / macOS
-   cp target/continuum-control-0.0.1-SNAPSHOT.jar docker/app.jar
+   cp target/app.jar docker/app.jar
    ```
 
 4. Suba todo o ambiente de contêineres:

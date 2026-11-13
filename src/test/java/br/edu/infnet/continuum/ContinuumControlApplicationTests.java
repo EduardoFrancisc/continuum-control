@@ -148,6 +148,7 @@ class ContinuumControlApplicationTests {
 
 		try {
 			missaoService.assignMission(dto);
+			fail("Deveria ter lançado IllegalArgumentException ao atribuir agente que não esteja DISPONÍVEL.");
 		} catch (IllegalArgumentException ex) {
 			if (ex.getMessage() == null || !ex.getMessage().contains("DISPONÍVEL")) {
 				fail("Falha: Deveria ter bloqueado a designação de um agente que não esteja DISPONÍVEL.");

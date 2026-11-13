@@ -94,6 +94,8 @@ public class SecurityConfig {
                         //EncerramentoMissoes
                         .requestMatchers(HttpMethod.GET, "/encerramento/**").hasAnyRole("ADMINISTRADOR", "SUPERVISOR", "OPERADOR")
                         .requestMatchers(HttpMethod.POST, "/encerramento").hasAnyRole("ADMINISTRADOR", "SUPERVISOR")
+
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

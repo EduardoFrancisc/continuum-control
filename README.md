@@ -33,27 +33,27 @@ A agência monitora eventos históricos críticos e identifica divergências em 
 
 ## 3. Fundamentação Técnica das Estratégias de Persistência
 
-Conforme exigido na modelagem do domínio (Seção 20 e Rubrica 3 do Assessment), a solução adota persistência poliglota com responsabilidades arquiteturais bem delimitadas:
+Conforme exigido na modelagem do domínio, a solução adota persistência poliglota com responsabilidades arquiteturais bem delimitadas:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                          CONTINUUM CONTROL                             │
-└──────────────┬─────────────────────────┬───────────────────────┬───────┘
-               │                         │                       │
-              SQL                      NoSQL          Leitura / Baixa Latência
-               ▼                         ▼                       ▼
-      ┌─────────────────┐       ┌─────────────────┐     ┌─────────────────┐
-      │   PostgreSQL    │       │     MongoDB     │     │  Spring Cache   │
-      │  (Relacional)   │       │  (Documentos)   │     │ (Chave-Valor)   │
-      └─────────────────┘       └─────────────────┘     └─────────────────┘
-      • Agentes                 • Ocorrências           • Estado Operacional
-      • Eventos Históricos        (6 subtipos com         (Dashboard analítico)
-      • Anomalias                 estruturas            • Estabilidade Temporal
-      • Missões Temporais         heterogêneas)           (Cálculo ponderado)
-      • Autorizações (AO)
-      • Encerramentos (EM)
-      • Intervenções
-      • Usuários (RBAC)
+└──────────┬─────────────────────────┬───────────────────────┬───────────┘
+           │                         │                       │
+          SQL                      NoSQL          Leitura / Baixa Latência
+           ▼                         ▼                       ▼
+  ┌─────────────────┐       ┌─────────────────┐     ┌─────────────────┐
+  │   PostgreSQL    │       │     MongoDB     │     │  Spring Cache   │
+  │  (Relacional)   │       │  (Documentos)   │     │ (Chave-Valor)   │
+  └─────────────────┘       └─────────────────┘     └─────────────────┘
+  • Agentes                 • Ocorrências           • Estado Operacional
+  • Eventos Históricos        (6 subtipos com         (Dashboard analítico)
+  • Anomalias                 estruturas            • Estabilidade Temporal
+  • Missões Temporais         heterogêneas)           (Cálculo ponderado)
+  • Autorizações (AO)
+  • Encerramentos (EM)
+  • Intervenções
+  • Usuários (RBAC)
 ```
 
 ### 3.1. Modelo Relacional — PostgreSQL (JPA / Hibernate)
@@ -92,7 +92,7 @@ O controle de acesso é implementado com **Spring Security** e tokens **JWT (Bea
 | **`OPERADOR`** | Monitoramento e consulta: cadastro de anomalias, acompanhamento do estado operacional, consulta detalhada de agentes, eventos e histórico. |
 | **`AGENTE`** | Operações de campo: registro de intervenções temporais e ocorrências nas missões em que está escalado. |
 
-### 4.1. Autorização Granular em Nível de Recurso (Rubrica 5.3)
+### 4.1. Autorização Granular em Nível de Recurso
 Além do papel `AGENTE`, o sistema aplica autorização granular:
 - Um agente só tem permissão para registrar uma intervenção temporal (`POST /intervencao`) se ele fizer parte da lista de agentes participantes daquela missão específica (`m.getAgentes()`). Caso contrário, a requisição é rejeitada com erro de negócio.
 
@@ -117,7 +117,7 @@ O sistema inicializa automaticamente com 4 usuários (senha padrão: `123456`):
 
 ## 6. Guia Passo a Passo de Execução
 
-### 6.1. Inicialização Completa com Docker Compose (Recomendado)
+### 6.1. Inicialização Completa com Docker Compose
 
 O projeto é 100% orquestrado via contêineres, inicializando o PostgreSQL, o MongoDB (com carga inicial) e a aplicação Spring Boot:
 

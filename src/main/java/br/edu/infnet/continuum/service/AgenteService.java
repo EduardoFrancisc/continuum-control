@@ -50,10 +50,16 @@ public class AgenteService {
     @CacheEvict(value = {"estabilidadeTemporal", "estadoOperacional"}, allEntries = true)
     public Agente delete(Long id) {
         Agente a = getById(id);
+
+        if (a.getSituacao() == SituacaoAgente.EM_MISSÃO){
+            throw new IllegalArgumentException("Agente " + a.getId() + " está em missão e não pode ser deletado agora.");
+        }
+
         if (a.getIsDeleted()){
             throw new EntidadeDeletada("Agente "+id+" já está deletado(a).");
         }
         a.setIsDeleted(true);
+        a.setSituacao(SituacaoAgente.INATIVO);
         return repository.save(a);
     }
 
@@ -62,7 +68,7 @@ public class AgenteService {
         Agente a = getById(id);
 
         if (a.getIsDeleted()){
-            throw new EntidadeDeletada("Agente "+id+" já está deletado(a).");
+            throw new EntidadeDeletada("Agente "+id+" está deletado(a).");
         }
 
         a.setNome(n.getNome());

@@ -101,13 +101,12 @@ public class MissaoService {
     public Missao assignMission(AtribuirMissaoDTO dto) {
         Missao m = getById(dto.id());
         Set<Agente> novosAgentes = new HashSet<>();
-        Set<Long> ids = new HashSet<>(dto.idsAgentes()); //Tira os duplicados
+        Set<Long> ids = new HashSet<>(dto.idsAgentes()); //Tira os duplicatas
 
         if (ids.size() != dto.idsAgentes().size()) {
             throw new IllegalArgumentException("Existem IDs de agentes repetidos.");
         }
 
-        //verificar o estado dos agentes, se necessário ainda
 
         for (Long id : dto.idsAgentes()) {
             Agente agente = agenteService.getById(id);
@@ -118,11 +117,6 @@ public class MissaoService {
 
             agente.setSituacao(SituacaoAgente.EM_MISSÃO);
             agenteService.update(agente, agente.getId());
-
-            //Verifica se algum agente ja está na missão <- Não faz sentido, devo apenas verificar se o agente está disponível.
-            if (m.getAgentes().stream().map(agenteAtual -> agenteAtual.getId()).toList().contains(id)){
-                throw new IllegalArgumentException("O agente " + id + " já está na missão.");
-            }
             novosAgentes.add(agente);
         }
 
